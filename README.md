@@ -1,4 +1,4 @@
-# Genisys — Developer Operating System
+# Genisys — Gen ai in system
 
 A local-first desktop "operating system" for developers. Genisys bundles the day-to-day tools an engineer reaches for — file/repo exploration, an HTTP client, notes, prompts, daily planning, clipboard history, timers — into a single Tauri 2 + React 19 app, with AI assistance woven into every surface.
 
