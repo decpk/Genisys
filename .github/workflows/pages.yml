@@ -3,11 +3,14 @@ name: Deploy landing site to GitHub Pages
 # Publishes the static marketing site in /docs to GitHub Pages.
 # One-time setup: repo Settings → Pages → Build and deployment → Source = "GitHub Actions".
 on:
+  # Deploy on every build of main (any push to the default branch).
   push:
     branches: [main]
-    paths:
-      - 'docs/**'
-      - '.github/workflows/pages.yml'
+  # Re-deploy after the Release build finishes, so download links stay current.
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+  # Allow manual runs from the Actions tab.
   workflow_dispatch:
 
 permissions:
