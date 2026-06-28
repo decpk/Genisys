@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Genisys — Your entire dev toolkit. One window. Zero cloud.</title>
   <meta name="description" content="Genisys bundles your terminal, AI chat, file explorer, HTTP client, notes and 15+ more tools into one local-first desktop app. Your keys, your machine — nothing leaves your laptop." />
-  <link rel="icon" type="image/svg+xml" href="./genisys-icon.svg" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Genisys — One app for everything a developer reaches for" />
@@ -314,6 +314,17 @@
     .pillar h4 { font-size: 1.18rem; font-weight: 750; }
     .pillar p { color: var(--muted); margin-top: 9px; font-size: .94rem; }
 
+    /* ---------- REPLACES STRIP ---------- */
+    .replaces-sec { padding: 46px 0 8px; }
+    .replaces-lead { text-align: center; color: var(--muted); font-size: 1.02rem; margin-bottom: 22px; }
+    .replaces-lead b { color: var(--text); font-weight: 700; }
+    .replaces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .rep { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--surface); border-radius: 100px; padding: 8px 15px; font-size: .88rem; color: var(--muted); transition: border-color .2s, transform .2s, background .2s; }
+    .rep:hover { border-color: var(--border-strong); transform: translateY(-2px); background: var(--surface-2); }
+    .rep s { color: var(--faint); text-decoration-color: rgba(248,113,113,.65); }
+    .rep svg { width: 14px; height: 14px; color: var(--violet); flex-shrink: 0; }
+    .rep b { color: #c4b5fd; font-weight: 650; }
+
     /* ---------- STATS ---------- */
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; border: 1px solid var(--border); border-radius: 22px; padding: 8px; background: var(--surface); }
     .stat { text-align: center; padding: 26px 14px; border-radius: 16px; }
@@ -533,6 +544,27 @@
             <div class="git-hint">Click any file → its <b>diff opens right on top of your terminal</b>. No one else does this.</div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REPLACES ===================== -->
+  <section class="replaces-sec">
+    <div class="wrap">
+      <p class="replaces-lead reveal">One install quietly replaces a <b>whole stack of apps &amp; subscriptions</b></p>
+      <div class="replaces reveal">
+        <span class="rep"><s>Postman</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>API Client</b></span>
+        <span class="rep"><s>iTerm2</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Terminal</b></span>
+        <span class="rep"><s>Mockoon</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Mock Server</b></span>
+        <span class="rep"><s>AirDrop</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>QuickShare</b></span>
+        <span class="rep"><s>Signal</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Messages</b></span>
+        <span class="rep"><s>DroidCam</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Monitor</b></span>
+        <span class="rep"><s>Notion</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Notes</b></span>
+        <span class="rep"><s>Gamma</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebPoint</b></span>
+        <span class="rep"><s>Paste</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Clipboard</b></span>
+        <span class="rep"><s>Raindrop</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebLinks</b></span>
+        <span class="rep"><s>Todoist</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Daily Plan</b></span>
+        <span class="rep"><s>NotebookLM</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Library</b></span>
       </div>
     </div>
   </section>
