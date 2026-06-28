@@ -318,12 +318,23 @@
     .replaces-sec { padding: 46px 0 8px; }
     .replaces-lead { text-align: center; color: var(--muted); font-size: 1.02rem; margin-bottom: 22px; }
     .replaces-lead b { color: var(--text); font-weight: 700; }
-    .replaces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .rep { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--surface); border-radius: 100px; padding: 8px 15px; font-size: .88rem; color: var(--muted); transition: border-color .2s, transform .2s, background .2s; }
-    .rep:hover { border-color: var(--border-strong); transform: translateY(-2px); background: var(--surface-2); }
-    .rep s { color: var(--faint); text-decoration-color: rgba(248,113,113,.65); }
-    .rep svg { width: 14px; height: 14px; color: var(--violet); flex-shrink: 0; }
-    .rep b { color: #c4b5fd; font-weight: 650; }
+    .rep-table-wrap { max-width: 920px; margin: 0 auto; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface); }
+    .rep-table { width: 100%; border-collapse: collapse; }
+    .rep-table th, .rep-table td { text-align: left; padding: 13px 20px; border-bottom: 1px solid var(--border); font-size: .93rem; }
+    .rep-table thead th { background: rgba(255,255,255,.03); color: var(--faint); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .rep-table tbody tr { transition: background .2s; }
+    .rep-table tbody tr:last-child td { border-bottom: none; }
+    .rep-table tbody tr:hover { background: var(--surface-2); }
+    .rep-table .old { color: var(--muted); white-space: nowrap; }
+    .rep-table .old s { color: var(--faint); text-decoration-color: rgba(248,113,113,.55); }
+    .rep-table .new-cell { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .rep-table .new-cell svg { width: 14px; height: 14px; color: var(--violet); flex-shrink: 0; }
+    .rep-table .new-cell b { color: #c4b5fd; font-weight: 700; }
+    .rep-table .why { color: var(--muted); }
+    @media (max-width: 760px) {
+      .rep-table-wrap { overflow-x: auto; }
+      .rep-table th:nth-child(3), .rep-table td:nth-child(3) { display: none; }
+    }
 
     /* ---------- STATS ---------- */
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; border: 1px solid var(--border); border-radius: 22px; padding: 8px; background: var(--surface); }
@@ -552,19 +563,26 @@
   <section class="replaces-sec">
     <div class="wrap">
       <p class="replaces-lead reveal">One install quietly replaces a <b>whole stack of apps &amp; subscriptions</b></p>
-      <div class="replaces reveal">
-        <span class="rep"><s>Postman</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>API Client</b></span>
-        <span class="rep"><s>iTerm2</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Terminal</b></span>
-        <span class="rep"><s>Mockoon</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Mock Server</b></span>
-        <span class="rep"><s>AirDrop</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>QuickShare</b></span>
-        <span class="rep"><s>Signal</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Messages</b></span>
-        <span class="rep"><s>DroidCam</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Monitor</b></span>
-        <span class="rep"><s>Notion</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Notes</b></span>
-        <span class="rep"><s>Gamma</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebPoint</b></span>
-        <span class="rep"><s>Paste</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Clipboard</b></span>
-        <span class="rep"><s>Raindrop</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebLinks</b></span>
-        <span class="rep"><s>Todoist</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Daily Plan</b></span>
-        <span class="rep"><s>NotebookLM</s><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Library</b></span>
+      <div class="rep-table-wrap reveal">
+        <table class="rep-table">
+          <thead>
+            <tr><th>The app you use today</th><th>Genisys replaces it with</th><th>What you gain</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="old"><s>Postman</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>API Client</b></span></td><td class="why">Free &amp; built in — no seat fees</td></tr>
+            <tr><td class="old"><s>iTerm2 · Windows Terminal</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Terminal</b></span></td><td class="why">Splits, plus reach it from your phone</td></tr>
+            <tr><td class="old"><s>Mockoon</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Mock Server</b></span></td><td class="why">Many servers with dummy data, in seconds</td></tr>
+            <tr><td class="old"><s>AirDrop · WeTransfer</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>QuickShare</b></span></td><td class="why">Any device, any OS, over a QR</td></tr>
+            <tr><td class="old"><s>Signal · Slack DMs</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Messages</b></span></td><td class="why">P2P, encrypted, never stored</td></tr>
+            <tr><td class="old"><s>DroidCam · EpocCam</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Monitor</b></span></td><td class="why">Your phone watches this camera over Wi-Fi</td></tr>
+            <tr><td class="old"><s>Notion · Obsidian</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Notes</b></span></td><td class="why">Notebooks with AI — and hands-free auto-scroll</td></tr>
+            <tr><td class="old"><s>Gamma · Beautiful.ai</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebPoint</b></span></td><td class="why">Slide decks from a sentence</td></tr>
+            <tr><td class="old"><s>Paste · Maccy</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Clipboard</b></span></td><td class="why">Searchable history with image OCR</td></tr>
+            <tr><td class="old"><s>Raindrop · Pocket</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>WebLinks</b></span></td><td class="why">Saved links, instantly searchable</td></tr>
+            <tr><td class="old"><s>Things 3 · Todoist</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Daily Plan</b></span></td><td class="why">A planner that suggests with AI</td></tr>
+            <tr><td class="old"><s>NotebookLM</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Library</b></span></td><td class="why">Custom-length books, chapter by chapter</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -878,7 +896,7 @@
       { cat:'ai', icon:I.prompt, name:'Prompts', punch:'Your <span class="kw">prompt library</span>, finally organized.', desc:'Tabs, categories, folders, favorites, usage tracking and per-prompt model targeting.' },
       { cat:'ai', icon:I.library, name:'Library', punch:'Revolutionary <span class="kw">chapter-by-chapter</span> book generation that no other app does.', desc:'Name a topic, a book, or a URL and get a progressive, easy-to-understand knowledge base at the length you choose — with translations, highlights, quizzes and resume-reading.' },
       { cat:'ai', icon:I.slides, name:'WebPoint', punch:'Slide decks <span class="kw">from a sentence</span>.', desc:'Generate or edit full presentations from natural language, with an in-app editor and present mode.' },
-      { cat:'productivity', icon:I.notes, name:'Notes', punch:'Notebooks that <span class="kw">think with you</span>.', desc:'Sections, topics, labels, favorites, fuzzy search and a rich Tiptap WYSIWYG editor with AI on the side.' },
+      { cat:'productivity', icon:I.notes, name:'Notes', punch:'Does your notes app auto-scroll? This one does — go <span class="kw">hands-free</span>.', desc:'Multi-notebook notes with sections, topics, labels, fuzzy search and a rich Tiptap editor — plus AI on the side and hands-free auto-scroll while you read.' },
       { cat:'productivity', icon:I.plan, name:'Daily Plan', punch:'Plan your day — <span class="kw">AI does the heavy lifting</span>.', desc:'Tasks, calendar items, focus sessions, search and AI suggestions in one planner.' },
       { cat:'productivity', icon:I.link, name:'WebLinks', punch:'Every link you save, <span class="kw">instantly searchable</span>.', desc:'Nested collections, page previews, fuzzy search and an AI assistant panel for your saved web.' },
       { cat:'productivity', icon:I.clip, name:'Clipboard', punch:'Every copy, <span class="kw">remembered and searchable</span>.', desc:'Persistent clipboard history with labels, OCR on images, by-date browsing and a menubar popover.' },
