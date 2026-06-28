@@ -238,9 +238,20 @@
     .spot .glow { position: absolute; width: 320px; height: 320px; border-radius: 50%; filter: blur(70px); opacity: .4; top: -120px; right: -80px; pointer-events: none; }
     .spot.term-spot .glow { background: var(--cyan); }
     .spot.chat-spot .glow { background: var(--violet); }
+    .spot.api-spot .glow { background: #34d399; }
     .spot .ic-lg { width: 58px; height: 58px; border-radius: 15px; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border-strong); margin-bottom: 22px; }
     .spot .ic-lg svg { width: 28px; height: 28px; color: #c4b5fd; }
     .spot.term-spot .ic-lg svg { color: #67e8f9; }
+    .spot.api-spot .ic-lg svg { color: #6ee7b7; }
+
+    /* keyword highlighter — draws the eye to each app's hook */
+    .kw {
+      color: #fff; font-weight: 700;
+      background-image: linear-gradient(120deg, rgba(139,92,246,.45), rgba(34,211,238,.30));
+      background-repeat: no-repeat; background-position: 0 92%; background-size: 100% 34%;
+      padding: 0 2px; border-radius: 3px;
+      -webkit-box-decoration-break: clone; box-decoration-break: clone;
+    }
     .spot h3 { font-size: 1.7rem; font-weight: 800; letter-spacing: -.02em; }
     .spot .punch { font-size: 1.16rem; font-weight: 650; margin-top: 10px; color: var(--text); }
     .spot p { color: var(--muted); margin-top: 12px; font-size: .98rem; }
@@ -407,7 +418,7 @@
           Genisys
         </a>
         <div class="nav-links" id="navLinks">
-          <a href="#spotlight">Terminal &amp; Chat</a>
+          <a href="#spotlight">Terminal &amp; API</a>
           <a href="#features">Features</a>
           <a href="#why">Why local-first</a>
           <a href="#download">Download</a>
@@ -510,15 +521,15 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">The two you'll open first</span>
-        <h2>A terminal that travels, and a chat that <span class="grad-text">actually does things.</span></h2>
-        <p>Your shell, split any way you like and reachable from your phone. An AI chat that doesn't just answer — it calls real tools across your files, APIs, prompts and notes.</p>
+        <h2>A terminal that travels, and the <span class="grad-text">last API client you'll install.</span></h2>
+        <p>Your shell — split any way you like and reachable from your phone — sitting right next to a full Postman replacement that needs no account and costs nothing.</p>
       </div>
       <div class="spotlight">
         <div class="spot term-spot reveal">
           <div class="glow"></div>
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
           <h3>Terminal</h3>
-          <p class="punch">The only terminal you can pick up on your phone — scan a QR and your shell is in your pocket.</p>
+          <p class="punch">The only terminal you can <span class="kw">pick up on your phone</span> — scan a QR and your shell is in your pocket.</p>
           <p>A multi-tab, recursively splittable PTY terminal built on xterm.js + a native Rust backend — with a built-in Git panel and a side-by-side diff viewer right beside it. Drag to reorder or split, pin and rename tabs, and keep scrollback across relaunches.</p>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> One of its kind: scan a QR to drive the same session from your phone over LAN</li>
@@ -526,16 +537,16 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Recursive split panes, pinned tabs &amp; scrollback that survives a restart</li>
           </ul>
         </div>
-        <div class="spot chat-spot reveal">
+        <div class="spot api-spot reveal">
           <div class="glow"></div>
-          <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <h3>Chat</h3>
-          <p class="punch">Chat that can actually touch your apps — not just talk about them.</p>
-          <p>A streaming AI assistant with real tool calls into your files, prompts, API client, notes and more. Full history, per-message context modes, snippet insertion, and inline clickable references.</p>
+          <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg></div>
+          <h3>API Client</h3>
+          <p class="punch">A full <span class="kw">Postman replacement</span>, built right in — no subscription, no seat fees, ever.</p>
+          <p>A Postman-style HTTP client that lives where you code: collections, environments, variables, cookies, response snapshots and full execution history. Free, local, and entirely yours.</p>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Real tool calls across every Genisys app</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bring your own key — OpenAI, Anthropic, Google, or any endpoint</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Streaming replies, snippets &amp; clickable entity links</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Collections, environments &amp; variables, organized like Postman</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Cookies, response snapshots &amp; full execution history</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> No account, no cloud sync, no per-seat pricing</li>
           </ul>
         </div>
       </div>
@@ -547,39 +558,33 @@
       </div>
       <div class="big-tiles">
         <div class="big-tile reveal">
-          <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg></div>
-          <h4>API Client</h4>
-          <p class="punch">Why pay a subscription just to call an API? This one is built in — and free.</p>
-          <p>A full Postman-style HTTP client right where you code — collections, environments, cookies, snapshots and execution history. No seat fees, no forced cloud sync.</p>
-        </div>
-        <div class="big-tile reveal">
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
           <h4>Mock Server</h4>
-          <p class="punch">Start as many servers as you need — each with its own dummy data — in seconds.</p>
+          <p class="punch">Start as many servers as you need — each with its own <span class="kw">dummy data</span> — in seconds.</p>
           <p>Backend not ready? Spin up local mock servers, stub any response, and stop waiting on a teammate's endpoint to test your own work.</p>
         </div>
         <div class="big-tile reveal">
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
           <h4>Library</h4>
-          <p class="punch">A revolutionary app that generates a book chapter-by-chapter — at any length — like nothing else does.</p>
+          <p class="punch">A revolutionary app that generates a book <span class="kw">chapter-by-chapter</span> — at any length — like nothing else does.</p>
           <p>Name a topic, a book, or even a URL and Genisys builds you a progressive, easy-to-understand knowledge base one chapter at a time — with translations, highlights and quizzes. First of its kind.</p>
         </div>
         <div class="big-tile reveal">
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
           <h4>Messages</h4>
-          <p class="punch">Worried your org logs every message to train its AI? Move the conversation here.</p>
+          <p class="punch">Worried your org logs every message to <span class="kw">train its AI</span>? Move the conversation here.</p>
           <p>Peer-to-peer, end-to-end encrypted LAN chat over the Noise protocol. Nothing touches a server. Nothing is ever written to disk.</p>
         </div>
         <div class="big-tile reveal">
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg></div>
           <h4>QuickShare</h4>
-          <p class="punch">The whole world built clouds just to move one file between two machines. You just scan a QR.</p>
+          <p class="punch">The whole world built clouds just to move one file between two machines. You just <span class="kw">scan a QR</span>.</p>
           <p>Beam files and text to any nearby device over WebRTC — HTTP fallback, optional zip bundling. No cloud, no cable, no account, no upload.</p>
         </div>
         <div class="big-tile reveal">
           <div class="ic-lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div>
           <h4>Monitor</h4>
-          <p class="punch">Turn this machine into a live camera your phone can watch from anywhere on Wi-Fi.</p>
+          <p class="punch">Turn this machine into a <span class="kw">live camera</span> your phone can watch from anywhere on Wi-Fi.</p>
           <p>A phone on the same network scans a QR, gets approved, then watches and listens live over WebRTC — no app to install on the other end.</p>
         </div>
       </div>
@@ -749,7 +754,7 @@
         <div class="foot-links">
           <div class="foot-col">
             <h5>Product</h5>
-            <a href="#spotlight">Terminal &amp; Chat</a>
+            <a href="#spotlight">Terminal &amp; API</a>
             <a href="#features">All features</a>
             <a href="#why">Why local-first</a>
             <a href="#download">Download</a>
@@ -801,22 +806,22 @@
       cam:'<path d="m22 8-6 4 6 4V8z"/><rect x="2" y="6" width="14" height="12" rx="2"/>'
     };
     const features = [
-      { cat:'code', icon:I.explorer, name:'Explorer', punch:'Browse files and repos like a power user.', desc:'Multi-pane splits, list/grid/thumbnail views, pins, Git integration, repo history and an AI submit flow.' },
-      { cat:'code', icon:I.api, name:'API Client', punch:'Why pay a subscription just to call an API? This one is built in — and free.', desc:'A full Postman-style HTTP client right where you code: collections, environments, variables, cookies, response snapshots and execution history. No seat fees, no cloud sync you never asked for.' },
-      { cat:'code', icon:I.mock, name:'Mock Server', punch:'Start as many servers as you need, each with dummy data, in seconds.', desc:'Spin up local mock servers to stub responses while you build against an endpoint that isn\'t ready.' },
-      { cat:'code', icon:I.flow, name:'Autoflow', punch:'Wire your tools together — no code.', desc:'A node-based canvas for chaining actions across apps into repeatable workflows.' },
-      { cat:'ai', icon:I.prompt, name:'Prompts', punch:'Your prompt library, finally organized.', desc:'Tabs, categories, folders, favorites, usage tracking and per-prompt model targeting.' },
-      { cat:'ai', icon:I.library, name:'Library', punch:'Revolutionary chapter-by-chapter book generation that no other app does.', desc:'Name a topic, a book, or a URL and get a progressive, easy-to-understand knowledge base at the length you choose — with translations, highlights, quizzes and resume-reading.' },
-      { cat:'ai', icon:I.slides, name:'WebPoint', punch:'Slide decks from a sentence.', desc:'Generate or edit full presentations from natural language, with an in-app editor and present mode.' },
-      { cat:'productivity', icon:I.notes, name:'Notes', punch:'Notebooks that think with you.', desc:'Sections, topics, labels, favorites, fuzzy search and a rich Tiptap WYSIWYG editor with AI on the side.' },
-      { cat:'productivity', icon:I.plan, name:'Daily Plan', punch:'Plan your day — AI does the heavy lifting.', desc:'Tasks, calendar items, focus sessions, search and AI suggestions in one planner.' },
-      { cat:'productivity', icon:I.link, name:'WebLinks', punch:'Every link you save, instantly searchable.', desc:'Nested collections, page previews, fuzzy search and an AI assistant panel for your saved web.' },
-      { cat:'productivity', icon:I.clip, name:'Clipboard', punch:'Every copy, remembered and searchable.', desc:'Persistent clipboard history with labels, OCR on images, by-date browsing and a menubar popover.' },
-      { cat:'productivity', icon:I.timer, name:'Timer', punch:'Deep-focus timer that floats on top.', desc:'Goals, milestones, tags, session stats and a detachable always-on-top mini window.' },
-      { cat:'productivity', icon:I.dash, name:'Dashboard', punch:'One screen for everything that matters.', desc:'Resizable, drag-reorderable tiles for snippets, news, live sports and project shortcuts.' },
-      { cat:'connect', icon:I.shield, name:'Messages', punch:'Worried your org logs every message to train its AI? Move the conversation here.', desc:'Peer-to-peer, end-to-end encrypted LAN chat over the Noise protocol — presence, reactions, disappearing messages and 1:1 calls. Nothing touches a server. Nothing is ever written to disk.' },
-      { cat:'connect', icon:I.share, name:'QuickShare', punch:'The whole world built clouds just to move one file between two machines. You just scan a QR.', desc:'A LAN hub any nearby device scans to beam files and text over WebRTC — HTTP fallback, optional zip bundling. No cloud, no cable, no account, no upload.' },
-      { cat:'connect', icon:I.cam, name:'Monitor', punch:'Turn this machine into a live camera.', desc:'A phone on the same Wi-Fi scans a QR, gets approved, then watches and listens live over WebRTC.' }
+      { cat:'code', icon:I.explorer, name:'Explorer', punch:'Browse files and repos like a <span class="kw">power user</span>.', desc:'Multi-pane splits, list/grid/thumbnail views, pins, Git integration, repo history and an AI submit flow.' },
+      { cat:'code', icon:I.api, name:'API Client', punch:'A free, built-in <span class="kw">Postman replacement</span> — no subscription to call an API.', desc:'A full Postman-style HTTP client right where you code: collections, environments, variables, cookies, response snapshots and execution history. No seat fees, no cloud sync you never asked for.' },
+      { cat:'code', icon:I.mock, name:'Mock Server', punch:'Start as many servers as you need, each with <span class="kw">dummy data</span>, in seconds.', desc:'Spin up local mock servers to stub responses while you build against an endpoint that isn\'t ready.' },
+      { cat:'code', icon:I.flow, name:'Autoflow', punch:'Wire your tools together — <span class="kw">no code</span>.', desc:'A node-based canvas for chaining actions across apps into repeatable workflows.' },
+      { cat:'ai', icon:I.prompt, name:'Prompts', punch:'Your <span class="kw">prompt library</span>, finally organized.', desc:'Tabs, categories, folders, favorites, usage tracking and per-prompt model targeting.' },
+      { cat:'ai', icon:I.library, name:'Library', punch:'Revolutionary <span class="kw">chapter-by-chapter</span> book generation that no other app does.', desc:'Name a topic, a book, or a URL and get a progressive, easy-to-understand knowledge base at the length you choose — with translations, highlights, quizzes and resume-reading.' },
+      { cat:'ai', icon:I.slides, name:'WebPoint', punch:'Slide decks <span class="kw">from a sentence</span>.', desc:'Generate or edit full presentations from natural language, with an in-app editor and present mode.' },
+      { cat:'productivity', icon:I.notes, name:'Notes', punch:'Notebooks that <span class="kw">think with you</span>.', desc:'Sections, topics, labels, favorites, fuzzy search and a rich Tiptap WYSIWYG editor with AI on the side.' },
+      { cat:'productivity', icon:I.plan, name:'Daily Plan', punch:'Plan your day — <span class="kw">AI does the heavy lifting</span>.', desc:'Tasks, calendar items, focus sessions, search and AI suggestions in one planner.' },
+      { cat:'productivity', icon:I.link, name:'WebLinks', punch:'Every link you save, <span class="kw">instantly searchable</span>.', desc:'Nested collections, page previews, fuzzy search and an AI assistant panel for your saved web.' },
+      { cat:'productivity', icon:I.clip, name:'Clipboard', punch:'Every copy, <span class="kw">remembered and searchable</span>.', desc:'Persistent clipboard history with labels, OCR on images, by-date browsing and a menubar popover.' },
+      { cat:'productivity', icon:I.timer, name:'Timer', punch:'Deep-focus timer that <span class="kw">floats on top</span>.', desc:'Goals, milestones, tags, session stats and a detachable always-on-top mini window.' },
+      { cat:'productivity', icon:I.dash, name:'Dashboard', punch:'<span class="kw">One screen</span> for everything that matters.', desc:'Resizable, drag-reorderable tiles for snippets, news, live sports and project shortcuts.' },
+      { cat:'connect', icon:I.shield, name:'Messages', punch:'Worried your org logs every message to <span class="kw">train its AI</span>? Move the conversation here.', desc:'Peer-to-peer, end-to-end encrypted LAN chat over the Noise protocol — presence, reactions, disappearing messages and 1:1 calls. Nothing touches a server. Nothing is ever written to disk.' },
+      { cat:'connect', icon:I.share, name:'QuickShare', punch:'The whole world built clouds just to move one file between two machines. You just <span class="kw">scan a QR</span>.', desc:'A LAN hub any nearby device scans to beam files and text over WebRTC — HTTP fallback, optional zip bundling. No cloud, no cable, no account, no upload.' },
+      { cat:'connect', icon:I.cam, name:'Monitor', punch:'Turn this machine into a <span class="kw">live camera</span>.', desc:'A phone on the same Wi-Fi scans a QR, gets approved, then watches and listens live over WebRTC.' }
     ];
     const catLabel = { code:'Code', ai:'AI', productivity:'Focus', connect:'Connect' };
     const grid = document.getElementById('grid');
