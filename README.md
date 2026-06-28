@@ -1,5 +1,8 @@
 # Genisys — Gen ai in system
 
+<img width="1627" height="349" alt="image" src="https://github.com/user-attachments/assets/2f08278f-09cf-4ad9-9408-2476dde9fb29" />
+
+
 A local-first desktop "operating system" for developers. Genisys bundles the day-to-day tools an engineer reaches for — file/repo exploration, an HTTP client, notes, prompts, daily planning, clipboard history, timers — into a single Tauri 2 + React 19 app, with AI assistance woven into every surface.
 
 Everything runs on the user's machine: SQLite for structured data, a Rust backend for native integrations (Git, MCP, Whisper STT, PTY terminals, global shortcuts, mDNS peer discovery + Noise-encrypted LAN messaging), and bring-your-own-key AI providers (OpenAI, Anthropic, Google, or any OpenAI-compatible endpoint) for cloud calls.
