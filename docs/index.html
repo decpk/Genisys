@@ -320,6 +320,14 @@
     .replaces-lead b { color: var(--text); font-weight: 700; }
     .replaces-foot { text-align: center; color: var(--muted); font-size: 1.02rem; margin-top: 24px; max-width: 62ch; margin-left: auto; margin-right: auto; }
     .replaces-foot b { color: #c4b5fd; font-weight: 700; }
+    .rep-total .size s.tot { color: var(--faint); text-decoration-color: rgba(248,113,113,.65); margin-right: 5px; }
+    .size-showdown { display: flex; align-items: center; justify-content: center; gap: clamp(18px, 5vw, 42px); margin-top: 30px; flex-wrap: wrap; }
+    .ss-col { display: flex; flex-direction: column; align-items: center; }
+    .ss-old s { font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 800; color: var(--faint); text-decoration-color: rgba(248,113,113,.75); }
+    .ss-new b { font-size: clamp(2.4rem, 7vw, 3.4rem); font-weight: 900; letter-spacing: -.035em; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+    .size-showdown small { color: var(--faint); font-size: .82rem; margin-top: 6px; }
+    .ss-arrow { width: 36px; height: 36px; color: var(--violet); flex-shrink: 0; }
+    @media (max-width: 760px) { .ss-arrow { transform: rotate(90deg); } }
     .rep-table-wrap { max-width: 920px; margin: 0 auto; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--surface); }
     .rep-table { width: 100%; border-collapse: collapse; }
     .rep-table th, .rep-table td { text-align: left; padding: 13px 20px; border-bottom: 1px solid var(--border); font-size: .93rem; }
@@ -592,9 +600,14 @@
             <tr><td class="old"><s>Amphetamine · Caffeine</s></td><td><span class="new-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><b>Stay Awake</b></span></td><td class="why">Keep your machine awake with one toggle</td><td class="size">~5 MB</td></tr>
           </tbody>
           <tfoot>
-            <tr class="rep-total"><td>Genisys — all of the above</td><td><span class="new-cell"><b>One single app</b></span></td><td class="why">≈ 1.8 GB of installs replaced</td><td class="size"><b>~40 MB</b></td></tr>
+            <tr class="rep-total"><td>Genisys — all of the above</td><td><span class="new-cell"><b>One single app</b></span></td><td class="why">Add up every install above…</td><td class="size"><s class="tot">~1.8 GB</s> → <b>~40 MB</b></td></tr>
           </tfoot>
         </table>
+      </div>
+      <div class="size-showdown reveal">
+        <span class="ss-col ss-old"><s>~1.8 GB</s><small>the apps above, combined</small></span>
+        <svg class="ss-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <span class="ss-col ss-new"><b>~40 MB</b><small>all of Genisys, one app</small></span>
       </div>
       <p class="replaces-foot reveal">Those installable apps add up to <b>well over 1.8 GB</b> — each Electron app bundling its own copy of Chromium. Genisys delivers all of it in <b>one ~40 MB app</b> with a near-zero memory footprint. <span style="color:var(--faint)">(Approximate installed sizes; they vary by version and platform.)</span></p>
     </div>
