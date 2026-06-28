@@ -59,7 +59,27 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'Genisys ${{ github.ref_name }}'
-          releaseBody: 'See the assets below to download and install this version.'
+          releaseBody: |
+            Download the installer for your platform from the **Assets** below.
+
+            ### 🪟 Windows
+            Download `*_x64-setup.exe` (or the `.msi`) and run it.
+            If SmartScreen warns "Windows protected your PC", click **More info → Run anyway**.
+
+            ### 🍎 macOS
+            - **Apple Silicon (M1/M2/M3):** download `*_aarch64.dmg`
+            - **Intel:** download `*_x64.dmg`
+
+            Open the `.dmg` and drag Genisys to Applications. On first launch macOS may say
+            "Genisys can't be opened" — **right-click the app → Open**, or run once:
+            ```
+            xattr -cr /Applications/Genisys.app
+            ```
+
+            ### 🐧 Linux
+            Use the `.AppImage` (chmod +x, then run), or install the `.deb` / `.rpm`.
+
+            > These builds are not signed with paid certificates, so the warnings above are expected and safe to dismiss.
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
