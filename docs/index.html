@@ -378,6 +378,18 @@
     .dl .btn { width: 100%; }
     .dl-note { text-align: center; color: var(--faint); font-size: .9rem; margin-top: 26px; }
     .dl-note a { color: #a78bfa; font-weight: 600; }
+    /* notice shown while desktop installers aren't published yet */
+    .dl-warn {
+      display: flex; gap: 14px; align-items: flex-start; text-align: left;
+      border: 1px solid rgba(245, 158, 11, .34);
+      background: linear-gradient(135deg, rgba(245, 158, 11, .13), rgba(245, 158, 11, .04));
+      border-radius: 14px; padding: 16px 20px; margin-bottom: 24px;
+    }
+    .dl-warn .warn-ic { flex-shrink: 0; width: 22px; height: 22px; color: #fbbf24; margin-top: 2px; }
+    .dl-warn strong { display: block; color: #fcd34d; font-weight: 700; margin-bottom: 3px; }
+    .dl-warn p { color: var(--muted); font-size: .92rem; margin: 0; }
+    .dl-warn a { color: #fcd34d; font-weight: 600; }
+    .dl-warn code { font-family: 'JetBrains Mono', monospace; font-size: .85em; color: var(--text); background: rgba(255, 255, 255, .06); padding: 1px 6px; border-radius: 5px; }
 
     /* ---------- CTA BANNER ---------- */
     .banner {
@@ -793,6 +805,16 @@
         <h2>Free, and on your machine in <span class="grad-text">two minutes.</span></h2>
         <p>Pick your platform. No sign-up, no account — just download and open.</p>
       </div>
+      <div id="dl-warning" class="dl-warn reveal" role="status">
+        <svg class="warn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div>
+          <strong>Desktop installers aren't published yet</strong>
+          <p>The macOS <code>.dmg</code> and Windows <code>.exe</code>/<code>.msi</code> builds are still being prepared, so the download buttons below may not work just yet. In the meantime you can <a href="https://github.com/decpk/Genisys#getting-started" target="_blank" rel="noopener">clone the repo and run it locally</a> — it only takes a couple of minutes. <a href="https://github.com/decpk/Genisys/releases" target="_blank" rel="noopener">Watch the releases page</a> to be notified the moment the installers go live.</p>
+        </div>
+      </div>
       <div class="dl-grid">
         <div class="dl reveal">
           <div class="os-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.04c-.03-2.6 2.13-3.85 2.23-3.91-1.22-1.78-3.11-2.02-3.78-2.05-1.61-.16-3.14.95-3.96.95-.81 0-2.07-.93-3.4-.9-1.75.03-3.36 1.02-4.26 2.58-1.82 3.16-.47 7.83 1.3 10.39.86 1.25 1.89 2.66 3.24 2.61 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.03 2.29-1.28 3.15-2.54.99-1.46 1.4-2.87 1.42-2.94-.03-.01-2.73-1.05-2.76-4.16zM14.5 4.15c.72-.87 1.2-2.08 1.07-3.28-1.03.04-2.28.69-3.02 1.56-.66.77-1.24 2-1.08 3.18 1.15.09 2.32-.59 3.03-1.46z"/></svg></div>
@@ -1002,6 +1024,23 @@
       if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
     }), { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ---- auto-hide the "installers not published" notice once real builds ship ---- */
+    (function () {
+      const warn = document.getElementById('dl-warning');
+      if (!warn) return;
+      const INSTALLER_RE = /\.(dmg|exe|msi|appimage|deb|rpm)$/i;
+      fetch('https://api.github.com/repos/decpk/Genisys/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+        .then(r => r.ok ? r.json() : null)
+        .then(rel => {
+          const hasInstaller = rel && Array.isArray(rel.assets) &&
+            rel.assets.some(a => INSTALLER_RE.test(a.name || ''));
+          // Only drop the notice on positive confirmation that installers exist.
+          // Any error / no release / no matching assets keeps the warning up (safe default).
+          if (hasInstaller) warn.style.display = 'none';
+        })
+        .catch(() => {});
+    })();
 
     /* ---- terminal typing animation (token-based, tag-safe) ---- */
     const term = document.getElementById('term');
