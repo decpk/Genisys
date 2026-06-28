@@ -1,0 +1,1 @@
+export { TtsVoiceSetting } from './TtsVoiceSetting'

@@ -1,0 +1,1 @@
+export { ClipboardSyntaxHighlightSetting } from './ClipboardSyntaxHighlightSetting'

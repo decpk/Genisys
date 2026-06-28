@@ -1,0 +1,1 @@
+export { AppStoreSearchView } from './AppStoreSearchView'

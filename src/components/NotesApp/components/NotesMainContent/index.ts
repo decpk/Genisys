@@ -1,0 +1,1 @@
+export { NotesMainContent } from './NotesMainContent'

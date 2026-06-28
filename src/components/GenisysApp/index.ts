@@ -1,0 +1,1 @@
+export { GenisysApp } from './GenisysApp'

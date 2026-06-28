@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Audio/video calls in the Messages app capture the microphone and camera.
+	     Paired with the NSMicrophoneUsageDescription / NSCameraUsageDescription
+	     strings in Info.plist, these entitlements keep capture working when the
+	     app is signed with the hardened runtime (required for notarization). -->
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
+	<key>com.apple.security.device.camera</key>
+	<true/>
+</dict>
+</plist>

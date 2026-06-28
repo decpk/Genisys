@@ -1,0 +1,1 @@
+export { MermaidFooter } from './MermaidFooter'

@@ -1,0 +1,1 @@
+export { SmartCollectionsSidebar } from './SmartCollectionsSidebar'

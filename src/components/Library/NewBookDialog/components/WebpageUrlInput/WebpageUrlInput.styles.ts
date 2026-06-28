@@ -1,0 +1,7 @@
+export const LABEL = 'text-xs font-medium text-muted-foreground mb-1 block uppercase tracking-wide'
+export const WRAPPER = 'flex flex-col gap-1'
+export const INPUT_WRAPPER = 'relative flex items-center'
+export const ICON_WRAPPER = 'absolute left-3 text-muted-foreground/60 pointer-events-none'
+export const INPUT = 'pl-9'
+export const ERROR = 'text-[11px] text-destructive mt-0.5'
+export const HINT = 'text-[11px] text-muted-foreground/60 mt-0.5'

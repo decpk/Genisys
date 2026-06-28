@@ -1,0 +1,36 @@
+# Windows (MSVC): `sherpa-onnx-sys` links the prebuilt `static-MT` artifacts,
+# which are compiled against the *static* C runtime (/MT). Rust defaults to the
+# *dynamic* CRT (/MD) on this target, which causes LNK2005 / LNK1169
+# "multiply defined symbol" linker errors. Building everything with the static
+# CRT makes the whole binary (Rust std, whisper.cpp, sqlite, etc.) match the
+# sherpa-onnx libs. This block only affects the Windows MSVC target.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
+
+# Native C/C++ dependencies built through CMake (whisper.cpp / ggml) must also
+# use the *static* MSVC runtime (/MT) to match `+crt-static` above and the
+# sherpa-onnx static-MT libs. The `cmake` crate only passes a `/MT` *flag*, which
+# modern CMake ignores in favor of its default dynamic runtime, so ggml otherwise
+# compiles against the dynamic CRT and fails to link (unresolved __imp_clock /
+# __imp_erff / __imp_expm1f / __imp_fmaxf / __imp_fminf / __imp_lroundf).
+#
+# whisper-rs-sys forwards any CMAKE_* / GGML_* / WHISPER_* env var to CMake as a
+# `-D` cache entry, so we set the runtime directly. CMP0091=NEW makes
+# CMAKE_MSVC_RUNTIME_LIBRARY authoritative regardless of whisper.cpp's
+# `cmake_minimum_required` version.
+[env]
+CMAKE_POLICY_DEFAULT_CMP0091 = "NEW"
+CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded"
+
+# Disable ggml's "optimize for the current system" path. With GGML_NATIVE ON
+# (the default for a host build), ggml-cpu's CMake probes the compiler with
+# `cc -mcpu=native` and, when that probe fails, *still* forces `-mcpu=native`
+# onto the compile line (ggml/src/ggml-cpu/CMakeLists.txt). Apple clang on
+# Apple Silicon rejects that flag:
+#   clang++: error: unsupported argument 'native' to option '-mcpu='
+# which breaks `tauri build` / `tauri dev` while building whisper-rs-sys.
+# Turning it OFF avoids the unsupported flag and is also the correct choice for
+# a *distributed* binary: a `-mcpu=native` / `-march=native` build bakes in
+# host-CPU instructions that can SIGILL on other machines. whisper-rs-sys
+# forwards this GGML_* var straight to CMake as `-DGGML_NATIVE=OFF`.
+GGML_NATIVE = "OFF"

@@ -1,0 +1,1 @@
+export { StatsTrendAreaTooltip } from './StatsTrendAreaTooltip'

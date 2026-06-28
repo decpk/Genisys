@@ -1,0 +1,1 @@
+export { QuickPromptsTile } from './QuickPromptsTile'

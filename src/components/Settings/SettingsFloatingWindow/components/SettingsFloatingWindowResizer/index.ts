@@ -1,0 +1,1 @@
+export { SettingsFloatingWindowResizer } from './SettingsFloatingWindowResizer'

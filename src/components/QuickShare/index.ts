@@ -1,0 +1,1 @@
+export { QuickShare } from './QuickShare'

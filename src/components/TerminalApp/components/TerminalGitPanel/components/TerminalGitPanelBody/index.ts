@@ -1,0 +1,1 @@
+export { TerminalGitPanelBody } from './TerminalGitPanelBody'

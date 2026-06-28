@@ -1,0 +1,1 @@
+export { ClipboardMaxItemsSetting } from './ClipboardMaxItemsSetting'

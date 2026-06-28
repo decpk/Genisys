@@ -1,0 +1,1 @@
+export { WebpointAIAssistantWrapper } from './WebpointAIAssistantWrapper'

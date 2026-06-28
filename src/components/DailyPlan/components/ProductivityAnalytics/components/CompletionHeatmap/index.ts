@@ -1,0 +1,1 @@
+export { CompletionHeatmap } from './CompletionHeatmap'

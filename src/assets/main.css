@@ -1,0 +1,1520 @@
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/literata';
+@import '@fontsource-variable/lora';
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/newsreader';
+@import '@fontsource-variable/crimson-pro';
+@import '@fontsource/ia-writer-quattro';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource/poppins';
+@import '@fontsource-variable/cascadia-code';
+@import '@fontsource-variable/ubuntu-sans';
+@import '@fontsource/fira-sans';
+@import 'katex/dist/katex.min.css';
+@import 'sonner/dist/styles.css';
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans:
+    'Segoe UI', 'Segoe UI Web', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    'JetBrains Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  --font-system:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif:
+    Georgia, 'Times New Roman', 'Iowan Old Style', 'Palatino Linotype', serif;
+  --font-literata:
+    'Literata Variable', Georgia, serif;
+  --font-lora:
+    'Lora Variable', Georgia, serif;
+  --font-source-serif:
+    'Source Serif 4 Variable', Georgia, serif;
+  --font-inter:
+    'Inter Variable', system-ui, sans-serif;
+  --font-newsreader:
+    'Newsreader Variable', Georgia, serif;
+  --font-crimson-pro:
+    'Crimson Pro Variable', Georgia, serif;
+  --font-geist:
+    'Geist Variable', system-ui, sans-serif;
+  --font-geist-mono:
+    'Geist Mono Variable', ui-monospace, SFMono-Regular, monospace;
+  --font-poppins:
+    'Poppins', system-ui, sans-serif;
+  --font-segoe-ui:
+    'Segoe UI', 'Segoe UI Web', system-ui, sans-serif;
+  --font-cascadia-code:
+    'Cascadia Code Variable', ui-monospace, 'Consolas', monospace;
+  --font-ubuntu-sans:
+    'Ubuntu Sans Variable', system-ui, sans-serif;
+  --font-fira-sans:
+    'Fira Sans', system-ui, sans-serif;
+
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(240 10% 3.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 10% 3.9%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 10% 3.9%);
+  --color-primary: hsl(240 5.9% 10%);
+  --color-primary-foreground: hsl(0 0% 98%);
+  --color-secondary: hsl(240 4.8% 95.9%);
+  --color-secondary-foreground: hsl(240 5.9% 10%);
+  --color-muted: hsl(240 4.8% 95.9%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-accent: hsl(240 4.8% 95.9%);
+  --color-accent-foreground: hsl(240 5.9% 10%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(240 5.9% 90%);
+  /* Input border is the active theme's primary color blended 90% into the
+     background (i.e. only 10% primary). This keeps it subtle while still reading
+     as a different tone in light vs dark themes, since both primary and background
+     differ per mode. Intentionally NOT applied by applyTheme (themes.utils.ts) or
+     the theme-editor preview (buildPreviewStyle.ts) so this derivation always wins. */
+  --color-input: color-mix(in srgb, var(--color-primary) 10%, var(--color-background));
+  --color-ring: hsl(240 5.9% 10%);
+  --color-success: hsl(140 65% 36%);
+  --color-warning: hsl(40 85% 42%);
+  --color-info: hsl(212 70% 50%);
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-3xs: 0.625rem;
+  --text-3xs--line-height: 0.875rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius: 0.5rem;
+}
+
+/* ── Dark theme ─────────────────────────────────────────────── */
+.dark {
+  --color-background: hsl(224 14% 14%);
+  --color-foreground: hsl(210 20% 92%);
+  --color-card: hsl(224 12% 21%);
+  --color-card-foreground: hsl(210 20% 92%);
+  --color-popover: hsl(224 12% 21%);
+  --color-popover-foreground: hsl(210 20% 92%);
+  --color-primary: hsl(210 20% 92%);
+  --color-primary-foreground: hsl(224 14% 12%);
+  --color-secondary: hsl(224 10% 24%);
+  --color-secondary-foreground: hsl(210 20% 92%);
+  --color-muted: hsl(224 10% 20%);
+  --color-muted-foreground: hsl(218 12% 65%);
+  --color-accent: hsl(224 10% 24%);
+  --color-accent-foreground: hsl(210 20% 92%);
+  --color-destructive: hsl(0 62.8% 50%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-border: hsl(222 10% 34%);
+  /* --color-input intentionally omitted here: it is derived from primary in the
+     base :root block above and recomputes automatically for the dark palette. */
+  --color-ring: hsl(212 60% 50%);
+  --color-success: hsl(140 60% 55%);
+  --color-warning: hsl(40 85% 60%);
+  --color-info: hsl(212 80% 64%);
+}
+
+/* ── Text selection ─────────────────────────────────────────── */
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  color: var(--color-foreground);
+}
+
+/* ── Custom scrollbar ───────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-primary) 30%, transparent) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-primary) 55%, transparent);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/*
+ * Sidebar theme scoping — remaps base tokens inside sidebar/activity-bar
+ * containers so child components automatically pick up sidebar-specific colors.
+ * Falls back to the sidebar CSS custom properties set by applyTheme().
+ *
+ * The explicit `color` declaration is critical: without it, descendants that
+ * don't carry an explicit text color class inherit the `color` value resolved
+ * at <body> (the base foreground token), which can be unreadable on a dark
+ * sidebar surface (e.g. Noir Warm). Setting `color` here re-resolves the
+ * variable in this scope so plain inherited text uses the sidebar foreground.
+ */
+.sidebar-theme {
+  --color-background: var(--color-sidebar);
+  --color-foreground: var(--color-sidebar-foreground);
+  --color-card: var(--color-sidebar);
+  --color-card-foreground: var(--color-sidebar-foreground);
+  --color-popover: var(--color-sidebar);
+  --color-popover-foreground: var(--color-sidebar-foreground);
+  --color-secondary: var(--color-sidebar-accent);
+  --color-secondary-foreground: var(--color-sidebar-accent-foreground);
+  --color-muted: var(--color-sidebar-muted);
+  --color-muted-foreground: var(--color-sidebar-muted-foreground);
+  --color-accent: var(--color-sidebar-accent);
+  --color-accent-foreground: var(--color-sidebar-accent-foreground);
+  --color-border: var(--color-sidebar-border);
+  color: var(--color-foreground);
+}
+
+@layer base {
+  html {
+    font-size: 14px;
+  }
+
+  /* Override Tailwind v4 preflight's `appearance: button` — prevents macOS
+     WebKit / Tauri from painting the system accent-color on <button> elements. */
+  button,
+  [role='button'] {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply h-full overflow-hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased text-base font-sans;
+  }
+
+  #root {
+    @apply h-full overflow-hidden;
+  }
+
+  /* ── Global keyboard focus ring (theme-aware, inset to avoid overflow clipping) */
+  *:focus-visible {
+    @apply outline-2 outline-ring rounded-sm;
+    outline-offset: -2px;
+  }
+}
+
+/* ── Markdown prose (PR descriptions) ─────────────────────── */
+.pr-markdown h1,
+.pr-markdown h2,
+.pr-markdown h3,
+.pr-markdown h4,
+.pr-markdown h5,
+.pr-markdown h6 {
+  @apply text-foreground font-semibold mt-5 mb-2;
+}
+.pr-markdown h1 {
+  @apply text-xl;
+}
+.pr-markdown h2 {
+  @apply text-lg;
+}
+.pr-markdown h3 {
+  @apply text-base;
+}
+.pr-markdown p {
+  @apply my-2;
+}
+.pr-markdown .pr-image-group + .pr-image-group {
+  @apply mt-0;
+}
+.pr-markdown ul {
+  @apply list-disc pl-6 my-2;
+}
+.pr-markdown ol {
+  @apply list-decimal pl-6 my-2;
+}
+.pr-markdown li {
+  @apply my-0.5;
+}
+.pr-markdown blockquote {
+  @apply border-l-4 border-border pl-4 my-3 text-muted-foreground italic;
+}
+.pr-markdown code {
+  @apply bg-muted text-foreground px-1.5 py-0.5 rounded text-xs font-mono;
+}
+.pr-markdown pre {
+  @apply bg-muted p-3 rounded-md my-3 overflow-x-auto;
+}
+.pr-markdown pre code {
+  @apply bg-transparent p-0 text-xs;
+}
+.pr-markdown a {
+  @apply text-info underline underline-offset-2;
+}
+.pr-markdown table {
+  @apply w-full border-collapse my-3 text-sm;
+}
+.pr-markdown th {
+  @apply border border-border bg-muted px-3 py-1.5 text-left font-medium;
+}
+.pr-markdown td {
+  @apply border border-border px-3 py-1.5;
+}
+.pr-markdown hr {
+  @apply border-border my-4;
+}
+.pr-markdown img {
+  @apply my-3 max-h-[500px] object-contain;
+}
+
+/* ── News article reader prose ──────────────────────────────── */
+.news-article-prose p {
+  @apply my-1.5 leading-relaxed;
+}
+.news-article-prose h1,
+.news-article-prose h2,
+.news-article-prose h3 {
+  @apply text-foreground font-semibold mt-3 mb-1 text-[13px];
+}
+.news-article-prose h1 { @apply text-sm; }
+.news-article-prose ul { @apply list-disc pl-4 my-1.5; }
+.news-article-prose ol { @apply list-decimal pl-4 my-1.5; }
+.news-article-prose li { @apply my-0.5; }
+.news-article-prose blockquote {
+  @apply border-l-2 border-border pl-3 my-2 text-muted-foreground italic;
+}
+.news-article-prose a {
+  @apply text-info underline underline-offset-2;
+}
+.news-article-prose strong { @apply font-semibold text-foreground; }
+.news-article-prose img { @apply my-2 rounded-md max-h-40 object-cover; }
+
+/* ── Side-by-side images ──────────────────────────────────── */
+.pr-image-group {
+  @apply inline-block align-top my-1 mx-1;
+}
+.pr-image-group img {
+  @apply my-0 max-h-[400px];
+}
+
+/* ── Thin scrollbar for horizontal strips ─────────────────── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-muted-foreground) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-muted-foreground);
+  border-radius: 2px;
+}
+
+/* ── Lightbox overlay ─────────────────────────────────────── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+.lightbox-image {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  user-select: none;
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: white;
+  opacity: 0.7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: opacity 0.15s;
+}
+.lightbox-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  opacity: 0.7;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+.lightbox-nav:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+.lightbox-prev {
+  left: 1rem;
+}
+.lightbox-next {
+  right: 1rem;
+}
+.lightbox-counter {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  opacity: 0.7;
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+/* ── File history diff: dim unchanged lines ────────────────── */
+.dim-unchanged-line {
+  opacity: 0.35 !important;
+}
+
+/* Hide scrollbar for timeline ticks */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Subtle breathe animation (replaces pulse for empty states) ── */
+@keyframes breathe {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+@utility animate-breathe {
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+/* ── Keyboard shortcut recorder pulse ─────────────────── */
+@keyframes pulse-border {
+  0%, 100% { border-color: hsl(var(--primary) / 0.4); box-shadow: 0 0 0 0 hsl(var(--primary) / 0.1); }
+  50%      { border-color: hsl(var(--primary) / 0.8); box-shadow: 0 0 8px 2px hsl(var(--primary) / 0.15); }
+}
+@utility animate-pulse-border {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+/* ── APEX: search match pulse ──────────────────────────── */
+@keyframes apex-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--pulse-color, hsl(210, 70%, 50%));
+  }
+  50% {
+    box-shadow: 0 0 12px 4px var(--pulse-color, hsl(210, 70%, 50%));
+  }
+}
+
+/* ── Bookmark blink highlight ──────────────────────────── */
+@keyframes bookmark-blink {
+  0%   { background-color: transparent; }
+  15%  { background-color: hsl(var(--primary) / 0.15); }
+  30%  { background-color: transparent; }
+  50%  { background-color: hsl(var(--primary) / 0.15); }
+  65%  { background-color: transparent; }
+  100% { background-color: transparent; }
+}
+
+.bookmark-blink {
+  animation: bookmark-blink 1.2s ease-in-out;
+  border-radius: var(--radius);
+}
+
+/* ── Resume reading attention pulse ──────────────────── */
+@keyframes subtle-pulse {
+  0%, 100% { background-color: color-mix(in srgb, var(--color-primary) 3%, transparent); }
+  50%      { background-color: color-mix(in srgb, var(--color-primary) 12%, transparent); }
+}
+@keyframes indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+@keyframes glow-ring {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50%      { box-shadow: 0 0 12px 3px color-mix(in srgb, var(--color-primary) 20%, transparent); }
+}
+
+/* ── Right-panel tab attention indicator ──────────────────
+   Apple-style notification badge motion: a spring "appear"
+   when the badge first mounts and re-plays on value change,
+   then stays calm. No infinite pulse — that reads noisy. */
+@keyframes panel-indicator-appear {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@utility animate-panel-indicator-appear {
+  animation: panel-indicator-appear 320ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-panel-indicator-appear { animation: none; }
+}
+
+/* ── Timer empty-state: container mount fade + scale ─────── */
+@keyframes timer-empty-mount {
+  0%   { opacity: 0; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@utility animate-timer-empty-mount {
+  animation: timer-empty-mount 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Timer empty-state hourglass: periodic flip ──────────────
+   The hourglass sits still, then flips 180° every few seconds to
+   suggest "time passing / ready to start". Most of the cycle is
+   idle; the flip happens in the final stretch. Respects
+   `prefers-reduced-motion`. */
+@keyframes timer-hourglass-flip {
+  0%, 80%  { transform: rotate(0deg); }
+  100%     { transform: rotate(180deg); }
+}
+@utility animate-timer-hourglass-flip {
+  animation: timer-hourglass-flip 5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-timer-hourglass-flip {
+    animation: none;
+  }
+}
+
+/* ── Timer ring: breathing scale animation (running state) ── */
+@keyframes timer-ring-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.015); opacity: 0.96; }
+}
+@utility animate-timer-ring-breathe {
+  animation: timer-ring-breathe 2.6s ease-in-out infinite;
+}
+
+/* ── Workflow: subtle replay-from-here affordance ──────────
+   Used by the "Replay from here" button (NodeInspector toolbar)
+   and the matching CanvasNode context-menu entry. Conveys a warm
+   amber "recovery action available" cue without being noisy:
+   - Background breathes between a soft and slightly warmer warning tint.
+   - On hover, the Repeat2 icon rotates a quarter turn to hint at the
+     replay action; the rotation is cancelled on release.
+   The animation respects `prefers-reduced-motion`. */
+@keyframes replay-glow {
+  0%, 100% {
+    background-color: color-mix(in srgb, var(--color-warning) 8%, transparent);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    background-color: color-mix(in srgb, var(--color-warning) 16%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-warning) 25%, transparent);
+  }
+}
+@utility animate-replay-glow {
+  animation: replay-glow 2.8s ease-in-out infinite;
+}
+.replay-from-here-trigger [data-replay-icon] {
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.replay-from-here-trigger:hover [data-replay-icon] {
+  transform: rotate(-90deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-replay-glow {
+    animation: none;
+  }
+  .replay-from-here-trigger [data-replay-icon] {
+    transition: none;
+  }
+}
+
+/* ── react-json-view-lite custom styles ──────────────────────────── */
+.jv-container {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: transparent;
+}
+.jv-child {
+  margin: 0;
+  padding: 0 0 0 16px;
+}
+.jv-fields {
+  margin: 0;
+  padding: 0;
+}
+.jv-key {
+  color: #a31515;
+  font-weight: 600;
+  margin-right: 5px;
+}
+.jv-clickable {
+  cursor: pointer;
+}
+.jv-string {
+  color: #0451a5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.jv-number {
+  color: #098658;
+}
+.jv-boolean {
+  color: #b8860b;
+}
+.jv-null {
+  color: #808080;
+  font-style: italic;
+}
+.jv-other {
+  color: var(--color-foreground);
+}
+.jv-bracket {
+  color: #8b008b;
+  margin-right: 5px;
+  font-weight: bold;
+}
+.jv-bracket + .jv-bracket {
+  margin-left: -5px;
+}
+.jv-collapsed {
+  color: #808080;
+  font-style: italic;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.jv-collapsed::after {
+  content: '...';
+  font-size: 0.8em;
+}
+.jv-expand-icon,
+.jv-collapse-icon {
+  font-size: 1.2em;
+  margin-right: 5px;
+  user-select: none;
+  color: #6e6e6e;
+  cursor: pointer;
+}
+.jv-expand-icon::after {
+  content: '\25B8';
+}
+.jv-collapse-icon::after {
+  content: '\25BE';
+}
+
+/* ── Dark overrides ─────────────────────────────────────────── */
+.dark .jv-key {
+  color: #f48771;
+}
+.dark .jv-string {
+  color: #7ec8f2;
+}
+.dark .jv-number {
+  color: #4ec9b0;
+}
+.dark .jv-boolean {
+  color: #e5c07b;
+}
+.dark .jv-null {
+  color: #6a737d;
+}
+.dark .jv-bracket {
+  color: #ffd700;
+}
+.dark .jv-collapsed {
+  color: #6a737d;
+}
+.dark .jv-expand-icon,
+.dark .jv-collapse-icon {
+  color: #858585;
+}
+
+/* ── Type badges before values ──────────────────────────────── */
+.jv-string::before,
+.jv-number::before,
+.jv-boolean::before,
+.jv-null::before,
+.jv-undefined::before,
+.jv-other::before {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  font-style: normal;
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+  padding: 1px 5px;
+  margin-right: 6px;
+  border-radius: 3px;
+  vertical-align: middle;
+  border: 1px solid;
+}
+.jv-string::before {
+  content: 'string';
+  color: #0451a5;
+  background: hsl(210 60% 95%);
+  border-color: hsl(210 50% 82%);
+}
+.jv-number::before {
+  content: 'number';
+  color: #098658;
+  background: hsl(150 50% 94%);
+  border-color: hsl(150 40% 80%);
+}
+.jv-boolean::before {
+  content: 'boolean';
+  color: #b8860b;
+  background: hsl(40 60% 93%);
+  border-color: hsl(40 50% 80%);
+}
+.jv-null::before {
+  content: 'null';
+  color: #6b6b6b;
+  background: hsl(0 0% 94%);
+  border-color: hsl(0 0% 83%);
+}
+.jv-undefined::before {
+  content: 'undefined';
+  color: #6b6b6b;
+  background: hsl(0 0% 94%);
+  border-color: hsl(0 0% 83%);
+}
+.jv-other::before {
+  content: 'unknown';
+  color: #6b6b6b;
+  background: hsl(0 0% 94%);
+  border-color: hsl(0 0% 83%);
+}
+
+.dark .jv-string::before {
+  color: #7ec8f2;
+  background: hsl(210 40% 16%);
+  border-color: hsl(210 35% 28%);
+}
+.dark .jv-number::before {
+  color: #4ec9b0;
+  background: hsl(165 35% 14%);
+  border-color: hsl(165 30% 26%);
+}
+.dark .jv-boolean::before {
+  color: #e5c07b;
+  background: hsl(40 30% 15%);
+  border-color: hsl(40 30% 27%);
+}
+.dark .jv-null::before {
+  color: #6a737d;
+  background: hsl(0 0% 17%);
+  border-color: hsl(0 0% 28%);
+}
+.dark .jv-undefined::before {
+  color: #6a737d;
+  background: hsl(0 0% 17%);
+  border-color: hsl(0 0% 28%);
+}
+.dark .jv-other::before {
+  color: #6a737d;
+  background: hsl(0 0% 17%);
+  border-color: hsl(0 0% 28%);
+}
+
+/* Dock payload popover should show clean JSON values (no type badges). */
+.run-console-json-no-types .jv-string::before,
+.run-console-json-no-types .jv-number::before,
+.run-console-json-no-types .jv-boolean::before,
+.run-console-json-no-types .jv-null::before,
+.run-console-json-no-types .jv-undefined::before,
+.run-console-json-no-types .jv-other::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* ── Monaco editor transparent background ───────────────────── */
+.json-monaco-wrap .monaco-editor,
+.json-monaco-wrap .monaco-editor .overflow-guard,
+.json-monaco-wrap .monaco-editor .monaco-scrollable-element,
+.json-monaco-wrap .monaco-editor .lines-content,
+.json-monaco-wrap .monaco-editor .margin {
+  background: transparent !important;
+}
+
+/* ── Flow editor: cmd/ctrl-hover "go to definition" underline ── */
+.flow-cmd-link-underline {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ── Code editor: inline blame annotation (GitLens-style) ───── */
+.genisys-blame-inline-text {
+  opacity: 0.25;
+  font-style: italic;
+  font-weight: 400;
+  /* Keep the annotation strictly single-line and clip overflow.
+     Monaco can still wrap injected text under word-wrap unless we
+     force no-wrap semantics on the rendered span itself. */
+  display: inline-block;
+  max-width: min(48ch, 35vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+/* ── Code editor: inline AI edit preview (Cmd-K) ─────────────── */
+.genisys-inline-ai-delete {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: color-mix(in srgb, var(--color-destructive, #ef4444) 85%, transparent);
+  background: color-mix(in srgb, var(--color-destructive, #ef4444) 12%, transparent);
+}
+
+.genisys-inline-ai-delete-line {
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-destructive, #ef4444) 10%, transparent),
+    transparent
+  );
+}
+
+.genisys-inline-ai-insert {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--color-emerald-500, #22c55e) 90%, white 10%);
+  background: color-mix(in srgb, var(--color-emerald-500, #22c55e) 12%, transparent);
+}
+
+/* ── Activity panel: smooth expand/collapse ──────────────────── */
+@keyframes activity-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@utility animate-activity-fade-in {
+  animation: activity-fade-in 0.2s ease-out both;
+}
+
+@keyframes activity-result-reveal {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@utility animate-activity-result-reveal {
+  animation: activity-result-reveal 0.15s ease-out both;
+}
+
+/* ── Accordion: slide open / slide closed ────────────────────── */
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to   { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to   { height: 0; opacity: 0; }
+}
+@utility animate-accordion-down {
+  animation: accordion-down 0.2s ease-out both;
+}
+@utility animate-accordion-up {
+  animation: accordion-up 0.18s ease-in both;
+}
+
+/* ── Fullscreen Clock: split-flap flip animation ─────────────── */
+/* Flaps rotate around the card's mid-line; the brightness ramps lend a
+   subtle "light glances off the plastic flap" feel as it pivots edge-on. */
+@keyframes flip-card-top-fall {
+  from { transform: rotateX(0deg); filter: brightness(1); }
+  to   { transform: rotateX(-90deg); filter: brightness(0.55); }
+}
+@keyframes flip-card-bottom-rise {
+  from { transform: rotateX(90deg); filter: brightness(0.55); }
+  to   { transform: rotateX(0deg); filter: brightness(1); }
+}
+@utility animate-flip-card-top-fall {
+  animation: flip-card-top-fall 0.28s cubic-bezier(0.45, 0.05, 0.55, 0.45) both;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+}
+@utility animate-flip-card-bottom-rise {
+  animation: flip-card-bottom-rise 0.28s cubic-bezier(0.25, 0.8, 0.4, 1) 0.28s both;
+  transform-origin: 50% 0%;
+  backface-visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-flip-card-top-fall,
+  .animate-flip-card-bottom-rise { animation: none; }
+}
+
+/* ── Fullscreen Clock: aurora gradient flow ─────────────────── */
+@keyframes clock-aurora-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@utility animate-clock-aurora {
+  animation: clock-aurora-shift 8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-clock-aurora { animation: none; }
+}
+
+/* ── Fullscreen Clock: orbital ring rotation ────────────────── */
+@keyframes clock-ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@utility animate-clock-ring-spin-slow {
+  animation: clock-ring-spin 60s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-clock-ring-spin-slow { animation: none; }
+}
+
+/* ── Tiptap Chat Editor ──────────────────────────────────── */
+
+.chat-editor-content.ProseMirror {
+  outline: none;
+  word-break: break-word;
+}
+
+.chat-editor-content.ProseMirror p {
+  margin: 0;
+}
+
+.chat-editor-content.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--color-muted-foreground);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Slash command chip: /url, /repo, /file, /search */
+.chat-editor-content .slash-command-chip {
+  display: inline-flex;
+  align-items: center;
+  background: oklch(from var(--color-primary) l c h / 0.15);
+  color: var(--color-primary);
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.25);
+  border-radius: 0.375rem;
+  padding: 0 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  white-space: nowrap;
+}
+
+/* @ mention chip */
+.chat-editor-content .mention-chip {
+  display: inline-flex;
+  align-items: center;
+  background: oklch(0.55 0.2 250 / 0.15);
+  color: oklch(0.7 0.15 250);
+  border: 1px solid oklch(0.55 0.2 250 / 0.25);
+  border-radius: 0.375rem;
+  padding: 0 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  white-space: nowrap;
+}
+
+/* # hashtag chip */
+.chat-editor-content .hashtag-chip {
+  display: inline-flex;
+  align-items: center;
+  background: oklch(0.55 0.15 160 / 0.15);
+  color: oklch(0.7 0.12 160);
+  border: 1px solid oklch(0.55 0.15 160 / 0.25);
+  border-radius: 0.375rem;
+  padding: 0 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  white-space: nowrap;
+}
+
+/* ── Tiptap Explorer AI Editor ───────────────────────────── */
+
+/*
+ * NOTE: do NOT add `display: flex; align-items: center` here. The
+ * ProseMirror element has `overflow-y: auto` + a capped max-height
+ * (260px) so long inserted prompts can scroll. With centered flex,
+ * overflowed paragraphs are laid out at NEGATIVE offsets that the
+ * browser's scroll range cannot reach — the user would see a fixed
+ * middle slice of the prompt and not be able to scroll either way.
+ */
+.explorer-ai-editor.ProseMirror {
+  outline: none;
+  word-break: break-word;
+}
+
+.explorer-ai-editor.ProseMirror p {
+  margin: 0;
+}
+
+.explorer-ai-editor.ProseMirror p.is-editor-empty:first-child {
+  position: relative;
+}
+
+.explorer-ai-editor.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  color: var(--color-muted-foreground);
+  opacity: 0.5;
+  pointer-events: none;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* @ file mention chip in explorer editor */
+.explorer-ai-editor .file-mention-chip {
+  display: inline-flex;
+  align-items: center;
+  background: oklch(0.55 0.2 250 / 0.15);
+  color: oklch(0.7 0.15 250);
+  border: 1px solid oklch(0.55 0.2 250 / 0.25);
+  border-radius: 0.25rem;
+  padding: 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+/* ── Sports Score Animations ─────────────────────────────────────── */
+
+@keyframes score-flash {
+  0% { background-color: oklch(0.75 0.15 85 / 0.4); }
+  100% { background-color: transparent; }
+}
+
+@keyframes score-slide-in {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.score-flash {
+  animation: score-flash 1.5s ease-out;
+}
+
+.score-slide-in {
+  animation: score-slide-in 0.4s ease-out;
+}
+
+.score-refreshing-dot {
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes refresh-slot {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-refresh-slot {
+  animation: refresh-slot 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* === Multi-match scroll container === */
+.matches-scroll-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.2) transparent;
+}
+
+.matches-scroll-container::-webkit-scrollbar {
+  width: 3px;
+}
+
+.matches-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.matches-scroll-container::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 3px;
+}
+
+.matches-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* Each match card snaps into view — always stop at every card */
+.match-card-snap {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Key stats pill shimmer on first appear */
+.key-stat-pill {
+  animation: stat-fade-in 0.3s ease-out both;
+}
+
+@keyframes stat-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animation for multiple stat pills */
+.key-stat-pill:nth-child(1) { animation-delay: 0ms; }
+.key-stat-pill:nth-child(2) { animation-delay: 50ms; }
+.key-stat-pill:nth-child(3) { animation-delay: 100ms; }
+.key-stat-pill:nth-child(4) { animation-delay: 150ms; }
+.key-stat-pill:nth-child(5) { animation-delay: 200ms; }
+.key-stat-pill:nth-child(6) { animation-delay: 250ms; }
+
+/* Match card entrance animation */
+.match-card-enter {
+  animation: match-slide-up 0.35s ease-out both;
+}
+
+@keyframes match-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Notes App — TipTap Editor Prose ─── */
+
+/* Let the outer scroll container handle scrolling so labels scroll with content */
+.notes-editor-content .wysiwyg-editor-root,
+.notes-editor-content .wysiwyg-editor-root > div {
+  overflow: visible !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+
+.notes-editor-content .ProseMirror {
+  outline: none;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--color-foreground);
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.notes-editor-content .ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+
+.notes-editor-content .ProseMirror h1 {
+  font-size: 1.75em;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  letter-spacing: -0.02em;
+}
+
+.notes-editor-content .ProseMirror h1:first-child {
+  margin-top: 0;
+}
+
+.notes-editor-content .ProseMirror h2 {
+  font-size: 1.4em;
+  font-weight: 650;
+  line-height: 1.35;
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+  letter-spacing: -0.01em;
+}
+
+.notes-editor-content .ProseMirror h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1.2em;
+  margin-bottom: 0.3em;
+}
+
+.notes-editor-content .ProseMirror p {
+  margin: 0;
+}
+
+.notes-editor-content .ProseMirror ul:not([data-type="taskList"]) {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
+.notes-editor-content .ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+}
+
+.notes-editor-content .ProseMirror li {
+  margin: 0.25em 0;
+}
+
+.notes-editor-content .ProseMirror li p {
+  margin: 0;
+}
+
+.notes-editor-content .ProseMirror blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1em;
+  margin-left: 0;
+  color: var(--color-muted-foreground);
+  font-style: italic;
+}
+
+.notes-editor-content .ProseMirror code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--color-muted);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  color: var(--color-foreground);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.notes-editor-content .ProseMirror pre {
+  background: var(--color-muted);
+  border-radius: 0.5rem;
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 1em 0;
+}
+
+.notes-editor-content .ProseMirror pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
+.notes-editor-content .ProseMirror a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.notes-editor-content .ProseMirror a:hover {
+  text-decoration: underline;
+}
+
+.notes-editor-content .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5em 0;
+}
+
+.notes-editor-content .ProseMirror img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+.notes-editor-content .ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--color-muted-foreground);
+  opacity: 0.4;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/*
+ * Force the Sonner toaster's fixed positioning. Sonner injects its own
+ * `position: fixed` + offset rules at runtime via a <style> tag, which can be
+ * defeated in the production build (toasts then fall into normal document flow
+ * at the top-left). These bundled, unlayered `!important` rules guarantee the
+ * toaster stays anchored to its configured corner in both dev and packaged
+ * builds. Offsets reference Sonner's own `--offset-*` vars with hardcoded
+ * fallbacks matching AppToaster (bottom/right 10px).
+ */
+[data-sonner-toaster] {
+  position: fixed !important;
+}
+[data-sonner-toaster][data-y-position='bottom'] {
+  top: auto !important;
+  bottom: var(--offset-bottom, 10px) !important;
+}
+[data-sonner-toaster][data-y-position='top'] {
+  bottom: auto !important;
+  top: var(--offset-top, 16px) !important;
+}
+[data-sonner-toaster][data-x-position='right'] {
+  left: auto !important;
+  right: var(--offset-right, 10px) !important;
+}
+[data-sonner-toaster][data-x-position='left'] {
+  right: auto !important;
+  left: var(--offset-left, 16px) !important;
+}
+[data-sonner-toaster][data-x-position='center'] {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+[data-sonner-toast] [data-content],
+[data-sonner-toast] [data-title],
+[data-sonner-toast] [data-description],
+[data-sonner-toast] [data-icon],
+[data-sonner-toast] [data-button] {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/*
+ * Compact default toast — applied to the `sonner-default-toast` class set in
+ * AppToaster. Reduces padding, gap, and font size so notifications feel less
+ * intrusive while still leaving room for the icon and message.
+ */
+.sonner-default-toast[data-sonner-toast] {
+  padding: 10px 12px !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-content] {
+  gap: 2px !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-title] {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-description] {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--color-sidebar-foreground) !important;
+  opacity: 0.92;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-icon] {
+  width: 14px !important;
+  height: 14px !important;
+  margin-inline-end: 0 !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-icon] svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-button] {
+  padding: 3px 9px !important;
+  font-size: 11px !important;
+  height: auto !important;
+}
+
+/*
+ * Dismiss (X) close button — enabled globally via the `closeButton` prop on
+ * the Toaster so every notification can be removed on click. Sonner renders it
+ * top-left by default; move it to the top-right corner and theme it to match
+ * the sidebar-colored toast. !important is required to win over Sonner's
+ * higher-specificity theme selectors (e.g. dark-mode close button styles).
+ */
+.sonner-default-toast[data-sonner-toast] [data-close-button] {
+  left: unset !important;
+  right: 0 !important;
+  transform: translate(35%, -35%) !important;
+  background: var(--color-sidebar) !important;
+  border-color: var(--color-sidebar-border) !important;
+  color: var(--color-sidebar-foreground) !important;
+}
+
+.sonner-default-toast[data-sonner-toast] [data-close-button]:hover {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent-foreground) !important;
+}
+
+/* ── Wave 2C: AI Review finding decorations (Monaco DiffViewer) ─── */
+/* Glyph-margin / line-decoration classes used by the modified editor
+   to surface ReviewFinding severities. Paired with line backgrounds
+   that fade into the diff theme without overpowering it. */
+.review-finding-glyph-blocker { background-color: rgba(220, 38, 38, 0.85); width: 4px !important; }
+.review-finding-line-blocker { background-color: rgba(220, 38, 38, 0.08); }
+.review-finding-glyph-critical { background-color: rgba(239, 68, 68, 0.75); width: 4px !important; }
+.review-finding-line-critical { background-color: rgba(239, 68, 68, 0.07); }
+.review-finding-glyph-major { background-color: rgba(249, 115, 22, 0.7); width: 4px !important; }
+.review-finding-line-major { background-color: rgba(249, 115, 22, 0.06); }
+.review-finding-glyph-minor { background-color: rgba(234, 179, 8, 0.6); width: 4px !important; }
+.review-finding-line-minor { background-color: rgba(234, 179, 8, 0.05); }
+.review-finding-glyph-nit { background-color: rgba(100, 116, 139, 0.6); width: 4px !important; }
+.review-finding-line-nit { background-color: rgba(100, 116, 139, 0.04); }
+.review-finding-glyph-praise { background-color: rgba(34, 197, 94, 0.7); width: 4px !important; }
+.review-finding-line-praise { background-color: rgba(34, 197, 94, 0.06); }
+
+/* ── Auto Reviewer line-anchored issue markers (Monaco DiffViewer) ─── */
+/* Read-only gutter glyph + faint line tint for the Auto Reviewer's
+   line-anchored issues. Severity palette matches `severityMeta`
+   (rose/orange/amber/sky/slate) so the diff markers read the same as the
+   Issues-tab badges. */
+.ar-issue-glyph-critical { background-color: rgba(244, 63, 94, 0.8); width: 4px !important; }
+.ar-issue-line-critical { background-color: rgba(244, 63, 94, 0.08); }
+.ar-issue-glyph-high { background-color: rgba(249, 115, 22, 0.75); width: 4px !important; }
+.ar-issue-line-high { background-color: rgba(249, 115, 22, 0.07); }
+.ar-issue-glyph-medium { background-color: rgba(245, 158, 11, 0.7); width: 4px !important; }
+.ar-issue-line-medium { background-color: rgba(245, 158, 11, 0.06); }
+.ar-issue-glyph-low { background-color: rgba(14, 165, 233, 0.65); width: 4px !important; }
+.ar-issue-line-low { background-color: rgba(14, 165, 233, 0.05); }
+.ar-issue-glyph-info { background-color: rgba(100, 116, 139, 0.6); width: 4px !important; }
+.ar-issue-line-info { background-color: rgba(100, 116, 139, 0.05); }
+
+/* View-zone container injected into the modified side of the diff editor
+   for each FindingInlineCard. Monaco's view-zone overlay defaults to
+   non-interactive (descendants of `.view-zones` inherit pointer-events
+   restrictions from the lines/overlay layers), so we explicitly opt back
+   in here — otherwise the chevron + accept/dismiss/reopen buttons appear
+   "dead". Mirrors `.pr-diff-finding-zone` in PRDiffModal.css. */
+.review-finding-view-zone {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  user-select: text;
+}
+
+/* ── Quit Confirm Modal: animated backdrop ────────────────────── */
+@keyframes quit-aurora-shift {
+  0%   { background-position: 0% 50%, 100% 50%, 50% 0%; }
+  50%  { background-position: 100% 50%, 0% 50%, 50% 100%; }
+  100% { background-position: 0% 50%, 100% 50%, 50% 0%; }
+}
+@utility animate-quit-aurora {
+  animation: quit-aurora-shift 18s ease-in-out infinite;
+}
+
+@keyframes quit-blob-drift-a {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  33%  { transform: translate3d(6%, -4%, 0) scale(1.08); }
+  66%  { transform: translate3d(-4%, 5%, 0) scale(0.96); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@utility animate-quit-blob-a {
+  animation: quit-blob-drift-a 14s ease-in-out infinite;
+}
+
+@keyframes quit-blob-drift-b {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  33%  { transform: translate3d(-7%, 4%, 0) scale(1.05); }
+  66%  { transform: translate3d(5%, -6%, 0) scale(0.94); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@utility animate-quit-blob-b {
+  animation: quit-blob-drift-b 17s ease-in-out infinite;
+}
+
+@keyframes quit-blob-drift-c {
+  0%   { transform: translate3d(-50%, -50%, 0) scale(1); opacity: 0.55; }
+  50%  { transform: translate3d(-46%, -54%, 0) scale(1.1); opacity: 0.75; }
+  100% { transform: translate3d(-50%, -50%, 0) scale(1); opacity: 0.55; }
+}
+@utility animate-quit-blob-c {
+  animation: quit-blob-drift-c 20s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-quit-aurora,
+  .animate-quit-blob-a,
+  .animate-quit-blob-b,
+  .animate-quit-blob-c { animation: none; }
+}
+
+/* ── Genisys mark reveal — three layers assemble into the logo ─────────
+   The bottom layer settles first, then the middle, then the top diamond drops
+   onto the stack — each fades in and drops into place with a soft settle. Used
+   by <GenisysIconReveal>. Replay is driven by remounting (React `key`). */
+@keyframes genisys-layer-drop {
+  0%   { opacity: 0; transform: translateY(-5px) scale(0.94); }
+  60%  { opacity: 1; transform: translateY(1px) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.genisys-mark .dv-layer {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: genisys-layer-drop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.genisys-mark .dv-l-bottom { animation-delay: 0.05s; }
+.genisys-mark .dv-l-mid    { animation-delay: 0.22s; }
+.genisys-mark .dv-l-top    { animation-delay: 0.39s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .genisys-mark .dv-layer {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

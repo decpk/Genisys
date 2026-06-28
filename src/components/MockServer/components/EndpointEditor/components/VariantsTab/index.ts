@@ -1,0 +1,1 @@
+export { VariantsTab } from './VariantsTab'

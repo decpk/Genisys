@@ -1,0 +1,1 @@
+export { ExplorerHideFoldersSetting } from './ExplorerHideFoldersSetting'

@@ -1,0 +1,1 @@
+export { ImageInfoPopover } from './ImageInfoPopover'

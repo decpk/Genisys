@@ -1,0 +1,1 @@
+export { TerminalRenameDialog } from './TerminalRenameDialog'

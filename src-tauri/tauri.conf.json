@@ -1,0 +1,62 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Genisys",
+  "version": "1.0.0",
+  "identifier": "com.genisys.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Genisys",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": true,
+        "decorations": true,
+        "dragDropEnabled": false
+      },
+      {
+        "label": "timer-focus",
+        "title": "Timer Focus",
+        "width": 360,
+        "height": 360,
+        "minWidth": 280,
+        "minHeight": 280,
+        "resizable": true,
+        "alwaysOnTop": true,
+        "decorations": false,
+        "transparent": true,
+        "skipTaskbar": true,
+        "visible": false,
+        "url": "index.html?mode=focus-mini&app=timer"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; frame-src 'self' https: webpoint: http://webpoint.localhost https://webpoint.localhost; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https: library-image: http://library-image.localhost https://library-image.localhost; media-src 'self' blob: mediastream:; connect-src 'self' https://api.github.com https://github.com ipc: http://ipc.localhost",
+      "dangerousDisableAssetCspModification": ["style-src"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "macOS": {
+      "signingIdentity": "-",
+      "entitlements": "Entitlements.plist"
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

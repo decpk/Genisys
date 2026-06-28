@@ -1,0 +1,1 @@
+export { DebugTabsBar } from './DebugTabsBar'

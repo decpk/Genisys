@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#1a1a2e"/>
+  <!-- Hexagonal shell — "OS kernel" -->
+  <path d="M256 64L432 166V370L256 472L80 370V166L256 64Z" fill="white" opacity="0.12"/>
+  <path d="M256 96L400 182V354L256 440L112 354V182L256 96Z" fill="white" opacity="0.25"/>
+  <!-- Terminal cursor — developer identity -->
+  <rect x="155" y="210" width="32" height="120" rx="8" fill="white" opacity="0.9"/>
+  <!-- Code chevron > -->
+  <path d="M220 216L284 268L220 320" stroke="white" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <!-- Node dots — connected system -->
+  <circle cx="348" cy="210" r="28" fill="white" opacity="0.7"/>
+  <circle cx="348" cy="338" r="28" fill="white" opacity="0.7"/>
+  <line x1="348" y1="238" x2="348" y2="310" stroke="white" stroke-width="20" opacity="0.5"/>
+</svg>

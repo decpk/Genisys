@@ -1,0 +1,1 @@
+export { WireframeFace } from './WireframeFace'

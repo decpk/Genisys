@@ -1,0 +1,1 @@
+export { VoiceCommandsSetting } from './VoiceCommandsSetting'

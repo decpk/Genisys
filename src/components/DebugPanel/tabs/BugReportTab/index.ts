@@ -1,0 +1,1 @@
+export { BugReportTab } from './BugReportTab'

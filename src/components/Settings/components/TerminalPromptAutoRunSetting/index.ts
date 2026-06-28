@@ -1,0 +1,1 @@
+export { TerminalPromptAutoRunSetting } from './TerminalPromptAutoRunSetting'

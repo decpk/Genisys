@@ -1,0 +1,1 @@
+export { StatsGoalProgress } from './StatsGoalProgress'

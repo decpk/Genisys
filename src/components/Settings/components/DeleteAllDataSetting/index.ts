@@ -1,0 +1,1 @@
+export { DeleteAllDataSetting } from './DeleteAllDataSetting'

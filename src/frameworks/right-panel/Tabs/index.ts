@@ -1,0 +1,6 @@
+export { Tabs } from './Tabs'
+export { TabsList } from './TabsList'
+export { TabsTrigger } from './TabsTrigger'
+export type { TabsProps } from './Tabs.types'
+export type { TabsListProps } from './TabsList/TabsList.types'
+export type { TabsTriggerProps } from './TabsTrigger/TabsTrigger.types'

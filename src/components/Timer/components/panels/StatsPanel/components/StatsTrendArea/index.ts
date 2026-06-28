@@ -1,0 +1,1 @@
+export { StatsTrendArea } from './StatsTrendArea'

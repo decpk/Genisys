@@ -1,0 +1,5 @@
+export type { SmartCollectionKey, SmartCollectionConfig, SmartCollectionCount } from './smartCollections.types'
+export { detectCategories } from './detectCategories'
+export { computeSmartCollectionCounts } from './computeSmartCollectionCounts'
+export { filterBySmartCollection } from './filterBySmartCollection'
+export { SMART_COLLECTION_CONFIGS, SMART_COLLECTION_ICON_MAP, SMART_COLLECTION_ORDER } from './constants/smartCollectionConfig'

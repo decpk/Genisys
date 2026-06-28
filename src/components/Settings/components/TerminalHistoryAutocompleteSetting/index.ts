@@ -1,0 +1,1 @@
+export { TerminalHistoryAutocompleteSetting } from './TerminalHistoryAutocompleteSetting'

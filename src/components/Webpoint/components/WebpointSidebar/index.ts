@@ -1,0 +1,1 @@
+export { WebpointSidebar } from './WebpointSidebar'

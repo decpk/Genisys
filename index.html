@@ -1,0 +1,281 @@
+<!doctype html>
+<html class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/appIcon.svg" />
+    <title>Genisys</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'"
+    />
+  </head>
+
+  <body style="background-color: hsl(224 14% 14%); margin: 0">
+    <div id="root">
+      <!-- Splash screen – visible until React mounts -->
+      <div id="splash">
+        <canvas id="splash-canvas" aria-hidden="true"></canvas>
+        <div id="splash-content">
+          <div id="splash-logo">
+            <!-- Animated Genisys mark — three stacked layers that assemble into
+                 the logo: bottom layer settles first, then the middle, then the
+                 top diamond drops onto the stack. Pure CSS, CSP-safe. -->
+            <svg
+              id="splash-mark"
+              viewBox="0 0 32 32"
+              fill="none"
+              role="img"
+              aria-label="Genisys"
+            >
+              <g
+                fill="none"
+                stroke="var(--splash-fg)"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline class="dv-layer dv-l-bottom" points="5,22 16,28 27,22" />
+                <polyline class="dv-layer dv-l-mid" points="5,16 16,22 27,16" />
+                <polygon class="dv-layer dv-l-top" points="16,4 27,10 16,16 5,10" />
+              </g>
+            </svg>
+          </div>
+          <div id="splash-text">
+            <span id="splash-title">Loading Genisys…</span>
+            <span id="splash-tip">Warming up your workspace…</span>
+          </div>
+          <div id="splash-bar">
+            <div id="splash-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+      <style>
+        #splash {
+          /* Theme-aware tokens — overridden at runtime by public/splash.js from
+             the last-applied theme. These defaults match the dark theme. */
+          --splash-bg: hsl(224 14% 14%);
+          --splash-fg: rgba(255, 255, 255, 0.92);
+          --splash-primary: hsl(245 58% 51%);
+          --splash-logo-filter: brightness(0) invert(1);
+
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          overflow: hidden;
+          background:
+            radial-gradient(
+              120% 80% at 50% 38%,
+              color-mix(in srgb, var(--splash-primary) 14%, var(--splash-bg)) 0%,
+              var(--splash-bg) 58%,
+              color-mix(in srgb, var(--splash-bg) 88%, black) 100%
+            );
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        #splash-canvas {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+
+        #splash-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 22px;
+
+          /* Circular frosted-glass container floating over the galaxy field.
+             The translucent fill plus backdrop blur let the constellation show
+             through — softened — behind the logo, text and loader. */
+          box-sizing: border-box;
+          width: 272px;
+          height: 272px;
+          padding: 30px;
+          border-radius: 50%;
+          overflow: hidden;
+          background: color-mix(in srgb, var(--splash-bg) 9%, transparent);
+          -webkit-backdrop-filter: blur(2px) saturate(105%);
+          backdrop-filter: blur(2px) saturate(105%);
+        }
+
+        #splash-logo {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: splash-float 4.5s ease-in-out infinite;
+        }
+
+        #splash-logo::before {
+          content: '';
+          position: absolute;
+          inset: -42px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--splash-primary) 34%, transparent) 0%,
+            transparent 68%
+          );
+          animation: splash-glow 3.2s ease-in-out infinite;
+        }
+
+        #splash-logo img {
+          position: relative;
+          height: 64px;
+          width: auto;
+          filter: var(--splash-logo-filter)
+            drop-shadow(0 4px 18px color-mix(in srgb, var(--splash-primary) 50%, transparent));
+        }
+
+        /* Animated Genisys mark — three stacked layers assemble into the logo:
+           bottom settles first, then the middle, then the top diamond drops on. */
+        #splash-mark {
+          position: relative;
+          display: block;
+          height: 64px;
+          width: 64px;
+          overflow: visible;
+          filter: drop-shadow(
+            0 4px 18px color-mix(in srgb, var(--splash-primary) 50%, transparent)
+          );
+        }
+
+        #splash-mark .dv-layer {
+          opacity: 0;
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: splash-layer-drop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        #splash-mark .dv-l-bottom {
+          animation-delay: 0.05s;
+        }
+        #splash-mark .dv-l-mid {
+          animation-delay: 0.22s;
+        }
+        #splash-mark .dv-l-top {
+          animation-delay: 0.39s;
+        }
+
+        @keyframes splash-layer-drop {
+          0% {
+            opacity: 0;
+            transform: translateY(-5px) scale(0.94);
+          }
+          60% {
+            opacity: 1;
+            transform: translateY(1px) scale(1);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        #splash-text {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 7px;
+          text-align: center;
+        }
+
+        #splash-title {
+          color: var(--splash-fg);
+          font-size: 15px;
+          font-weight: 600;
+          letter-spacing: 0.4px;
+        }
+
+        #splash-tip {
+          min-height: 16px;
+          color: color-mix(in srgb, var(--splash-primary) 50%, var(--splash-fg));
+          font-size: 12.5px;
+          font-weight: 450;
+          letter-spacing: 0.3px;
+          opacity: 1;
+          transition: opacity 0.32s ease;
+        }
+
+        #splash-bar {
+          width: 140px;
+          height: 3px;
+          margin-top: 2px;
+          background: color-mix(in srgb, var(--splash-fg) 12%, transparent);
+          border-radius: 3px;
+          overflow: hidden;
+        }
+
+        #splash-bar-fill {
+          width: 42%;
+          height: 100%;
+          border-radius: 3px;
+          background: linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--splash-primary) 45%, transparent),
+            var(--splash-primary)
+          );
+          animation: splash-loading 1.3s ease-in-out infinite;
+        }
+
+        @keyframes splash-loading {
+          0% {
+            transform: translateX(-120%);
+          }
+          100% {
+            transform: translateX(360%);
+          }
+        }
+
+        @keyframes splash-float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+
+        @keyframes splash-glow {
+          0%,
+          100% {
+            opacity: 0.55;
+            transform: scale(0.96);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.05);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          #splash-logo,
+          #splash-logo::before,
+          #splash-bar-fill {
+            animation: none;
+          }
+          #splash-bar-fill {
+            width: 100%;
+            transform: none;
+          }
+          #splash-mark .dv-layer {
+            animation: none;
+            opacity: 1;
+            transform: none;
+          }
+        }
+      </style>
+    </div>
+    <script src="/splash.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

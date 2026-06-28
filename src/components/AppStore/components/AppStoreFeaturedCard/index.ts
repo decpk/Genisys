@@ -1,0 +1,1 @@
+export { AppStoreFeaturedCard } from './AppStoreFeaturedCard'

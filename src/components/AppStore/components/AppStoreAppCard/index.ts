@@ -1,0 +1,1 @@
+export { AppStoreAppCard } from './AppStoreAppCard'

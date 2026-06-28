@@ -1,0 +1,1 @@
+export { MinimalFace } from './MinimalFace'

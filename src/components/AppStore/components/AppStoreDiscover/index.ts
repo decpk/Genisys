@@ -1,0 +1,1 @@
+export { AppStoreDiscover } from './AppStoreDiscover'

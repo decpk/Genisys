@@ -1,0 +1,1 @@
+export { StatsDayOfWeekPattern } from './StatsDayOfWeekPattern'

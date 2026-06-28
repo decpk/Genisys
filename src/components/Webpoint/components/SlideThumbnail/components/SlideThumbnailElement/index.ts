@@ -1,0 +1,1 @@
+export { SlideThumbnailElement } from './SlideThumbnailElement'

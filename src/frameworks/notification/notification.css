@@ -1,0 +1,40 @@
+/* ── Notification Toast Overrides ─────────────────────────────────── */
+
+/* Prevent text selection on all toasts */
+[data-sonner-toast] {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Strip Sonner's default wrapper styles for our custom toasts */
+[data-sonner-toast]:has(.notification-toast) {
+  --normal-bg: transparent !important;
+  --normal-border: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.notification-toast {
+  animation: notification-slide-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Ensure 3-line clamp works */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

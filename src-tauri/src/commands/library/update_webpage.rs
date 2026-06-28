@@ -1,0 +1,47 @@
+use crate::commands::AppState;
+use crate::database::{load_webpage_url_db, update_webpage_file_db};
+use serde_json::Value;
+use tauri::{AppHandle, Manager, State};
+
+use super::mhtml::build_mhtml;
+
+#[tauri::command]
+pub async fn cmd_update_webpage(
+    app: AppHandle,
+    state: State<'_, AppState>,
+    id: String,
+    updated_at: String,
+) -> Result<Value, String> {
+    // Get URL and file_path from DB
+    let (url, file_name) = load_webpage_url_db(&state.db, &id)
+        .ok_or_else(|| "Webpage not found".to_string())?;
+
+    let webpages_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| format!("Cannot resolve app data dir: {e}"))?
+        .join("saved-webpages");
+
+    let full_path = webpages_dir.join(&file_name);
+
+    // Re-fetch and rebuild MHTML
+    let (_title, mhtml_bytes) =
+        tokio::task::spawn_blocking(move || build_mhtml(&url))
+            .await
+            .map_err(|e| format!("Task join error: {e}"))??;
+
+    let file_size = mhtml_bytes.len() as i64;
+
+    // Overwrite file on disk
+    std::fs::write(&full_path, &mhtml_bytes)
+        .map_err(|e| format!("Failed to write MHTML file: {e}"))?;
+
+    // Update DB timestamp and file size
+    update_webpage_file_db(&state.db, &id, file_size, &updated_at);
+
+    Ok(serde_json::json!({
+        "success": true,
+        "fileSize": file_size,
+        "updatedAt": updated_at
+    }))
+}

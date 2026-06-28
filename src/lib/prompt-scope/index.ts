@@ -1,0 +1,5 @@
+export { SCOPABLE_APPS } from './scopableApps'
+export { isFolderInScope } from './isFolderInScope'
+export { isPromptInScope } from './isPromptInScope'
+export { getFoldersForApp } from './getFoldersForApp'
+export type { PromptScopeApp } from './promptScope.types'

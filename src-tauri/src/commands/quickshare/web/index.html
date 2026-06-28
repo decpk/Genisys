@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <title>QuickShare</title>
+    <style>
+      :root {
+        --bg: #0b0e14;
+        --panel: #11151f;
+        --panel-2: #0e121b;
+        --fg: #e6e6e6;
+        --muted: #8b93a7;
+        --accent: #4f9cf9;
+        --accent-press: #3b82d6;
+        --danger: #f97066;
+        --live: #22c55e;
+        --border: #1e2536;
+        --radius: 12px;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+        overscroll-behavior: none;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        padding-top: calc(12px + env(safe-area-inset-top));
+        background: var(--panel);
+        border-bottom: 1px solid var(--border);
+        z-index: 5;
+      }
+      header .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--muted);
+        flex: none;
+        transition: background 0.2s;
+      }
+      header .dot.live {
+        background: var(--live);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+      }
+      header .dot.error {
+        background: var(--danger);
+      }
+      header .title {
+        font-weight: 650;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+      }
+      header .spacer {
+        flex: 1;
+      }
+      header .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      main {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 14px;
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .composer {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .composer.drag {
+        border-color: var(--accent);
+        background: rgba(79, 156, 249, 0.08);
+      }
+      .recipient-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .recipient-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--muted);
+        flex: none;
+      }
+      .recipient-select {
+        flex: 1;
+        min-width: 0;
+        appearance: none;
+        background: var(--panel-2);
+        color: var(--fg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      .recipient-select:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+      }
+      button.btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-weight: 550;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      button.btn:active {
+        background: #0a0d13;
+      }
+      button.btn.accent {
+        border-color: transparent;
+        background: var(--accent);
+        color: #03142e;
+      }
+      button.btn.accent:active {
+        background: var(--accent-press);
+      }
+      button.btn.block {
+        width: 100%;
+      }
+      button.btn:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      button.icon {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+      .drop-hint {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+      textarea {
+        width: 100%;
+        resize: vertical;
+        min-height: 44px;
+        max-height: 160px;
+        background: var(--panel-2);
+        color: var(--fg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .section-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--muted);
+        margin: 2px 2px -4px;
+      }
+      #uploads:empty,
+      #downloads:empty {
+        display: none;
+      }
+      #uploads,
+      #downloads {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .upload,
+      .download {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+      .upload .name,
+      .download .name {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .upload .name .pct,
+      .download .name .pct {
+        color: var(--muted);
+        flex: none;
+      }
+      .bar {
+        height: 6px;
+        background: var(--panel-2);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 0.15s;
+      }
+      .upload.error .bar > span,
+      .download.error .bar > span {
+        background: var(--danger);
+      }
+      #tray {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .item {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .thumb {
+        width: 46px;
+        height: 46px;
+        border-radius: 9px;
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        overflow: hidden;
+      }
+      .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .item .body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .item .name {
+        font-size: 14px;
+        font-weight: 550;
+        word-break: break-word;
+      }
+      .item .text {
+        font-size: 13.5px;
+        color: var(--fg);
+        white-space: pre-wrap;
+        word-break: break-word;
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 10px;
+        max-height: 160px;
+        overflow: auto;
+      }
+      .item .meta {
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .item .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 2px;
+        flex-wrap: wrap;
+      }
+      .empty {
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        padding: 28px 12px;
+        border: 1px dashed var(--border);
+        border-radius: var(--radius);
+      }
+      .note {
+        font-size: 11.5px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.5;
+      }
+      .note b {
+        color: #cbb26b;
+      }
+      .tray-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      #toasts {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 0 14px;
+        z-index: 50;
+        pointer-events: none;
+      }
+      .toast {
+        max-width: 92%;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13.5px;
+        color: var(--fg);
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.18s, transform 0.18s;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .toast.success {
+        border-color: rgba(34, 197, 94, 0.5);
+      }
+      .toast.error {
+        border-color: rgba(249, 112, 102, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <span class="dot" id="dot"></span>
+        <span class="title">QuickShare</span>
+        <span class="spacer"></span>
+        <span class="meta" id="meta">Connecting…</span>
+      </header>
+      <main>
+        <div class="composer" id="composer">
+          <div class="recipient-row">
+            <label class="recipient-label" for="recipient">Send to</label>
+            <select id="recipient" class="recipient-select">
+              <option value="everyone">Everyone</option>
+            </select>
+          </div>
+          <button class="btn accent block" id="pick">＋ Add files</button>
+          <div class="drop-hint">or drag &amp; drop / paste files here</div>
+          <div class="row">
+            <textarea id="text" placeholder="Type or paste text / a link to share…" rows="1"></textarea>
+          </div>
+          <button class="btn block" id="send-text" disabled>Send text</button>
+          <input type="file" id="file-input" multiple hidden />
+        </div>
+
+        <div id="uploads"></div>
+        <div id="downloads"></div>
+
+        <div class="tray-head">
+          <span class="section-label">Shared tray</span>
+          <button class="btn icon" id="download-zip" hidden>🗜 Download as zip</button>
+          <button class="btn icon" id="download-all" hidden>⬇ Download all</button>
+        </div>
+        <div id="tray"></div>
+
+        <p class="note">
+          QuickShare uses an <b>unencrypted</b> local-network connection. Only use it on
+          networks you trust. Files you send are saved on the host computer.
+        </p>
+      </main>
+      <div id="toasts"></div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var token = new URLSearchParams(location.search).get("token") || "";
+        var dot = document.getElementById("dot");
+        var meta = document.getElementById("meta");
+        var trayEl = document.getElementById("tray");
+        var uploadsEl = document.getElementById("uploads");
+        var downloadsEl = document.getElementById("downloads");
+        var composer = document.getElementById("composer");
+        var toastsEl = document.getElementById("toasts");
+        var downloadAllBtn = document.getElementById("download-all");
+        var downloadZipBtn = document.getElementById("download-zip");
+        var currentItems = [];
+        var fileInput = document.getElementById("file-input");
+        var textEl = document.getElementById("text");
+        var sendTextBtn = document.getElementById("send-text");
+        var pickBtn = document.getElementById("pick");
+        var recipientEl = document.getElementById("recipient");
+
+        var ws = null;
+        var reconnectDelay = 800;
+        var clientCount = 0;
+        // Connected peers (deduped by device) for the recipient picker, and which
+        // recipient is currently selected ("everyone" or a device id).
+        var clients = [];
+        var selectedTarget = "everyone";
+
+        // ---- device identity --------------------------------------------
+        // A stable per-device id (persisted) drives "send to whom": items are
+        // private to the sender + chosen recipient. A friendly name labels this
+        // device in everyone else's recipient picker.
+        function randId() {
+          if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+          return String(Date.now()) + "-" + Math.random().toString(16).slice(2);
+        }
+        function defaultDeviceName() {
+          var ua = navigator.userAgent || "";
+          var base = /iPhone/.test(ua)
+            ? "iPhone"
+            : /iPad/.test(ua)
+            ? "iPad"
+            : /Android/.test(ua)
+            ? "Android"
+            : /Macintosh|Mac OS X/.test(ua)
+            ? "Mac"
+            : /Windows/.test(ua)
+            ? "Windows PC"
+            : /Linux/.test(ua)
+            ? "Linux"
+            : "Device";
+          return base;
+        }
+        function lsGet(key, make) {
+          try {
+            var v = localStorage.getItem(key);
+            if (!v) {
+              v = make();
+              localStorage.setItem(key, v);
+            }
+            return v;
+          } catch (e) {
+            return make();
+          }
+        }
+        var deviceId = lsGet("qs_device_id", randId);
+        // Suffix a short id fragment so two devices of the same type are distinct.
+        var deviceName = lsGet("qs_device_name", function () {
+          return defaultDeviceName() + " " + deviceId.slice(0, 4);
+        });
+
+        // Files addressed specifically to this device auto-download the instant
+        // they appear — no manual "Download" tap. `autoPulled` tracks ids we've
+        // already handled; the items present at first connect are seeded as
+        // "seen" so a reconnect never re-pulls the backlog.
+        var autoPulled = Object.create(null);
+        var autoPushArmed = false;
+        function maybeAutoPull(items) {
+          if (!items) return;
+          for (var i = 0; i < items.length; i++) {
+            var it = items[i];
+            if (!it || autoPulled[it.id]) continue;
+            autoPulled[it.id] = true;
+            // The first pass (on connect / reconnect) only seeds "seen" ids — no
+            // toast and no download for the existing backlog.
+            if (!autoPushArmed) continue;
+            // Files sent *to me specifically* and small enough for the parallel
+            // range path auto-download (it waits politely for slices still
+            // uploading). Larger files fall back to a single plain GET that can't
+            // wait, so leave those for a manual tap.
+            var willAutoPull =
+              it.kind === "file" &&
+              it.target === deviceId &&
+              it.senderId !== deviceId &&
+              (it.size || 0) <= DL_MEM_CAP;
+            // Announce anything a *different* device just dropped. Auto-pulled
+            // files show their own "Saved" toast, so don't double up on those.
+            if (it.senderId !== deviceId && !willAutoPull) {
+              showToast(
+                it.kind === "text" ? "Received text" : "Received " + (it.name || "a file"),
+                "info"
+              );
+            }
+            if (willAutoPull) {
+              startDownload(it, true);
+            }
+          }
+        }
+
+        // ---- helpers ----------------------------------------------------
+        function fileUrl(id) {
+          return (
+            "/file/" +
+            encodeURIComponent(id) +
+            "?token=" +
+            encodeURIComponent(token) +
+            "&device=" +
+            encodeURIComponent(deviceId)
+          );
+        }
+        function b64utf8(str) {
+          var bytes = new TextEncoder().encode(str);
+          var bin = "";
+          for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+          return btoa(bin);
+        }
+        function fmtSize(n) {
+          if (!n && n !== 0) return "";
+          if (n < 1024) return n + " B";
+          var u = ["KB", "MB", "GB", "TB"];
+          var i = -1;
+          do {
+            n /= 1024;
+            i++;
+          } while (n >= 1024 && i < u.length - 1);
+          return n.toFixed(n < 10 ? 1 : 0) + " " + u[i];
+        }
+        function fmtTime(ms) {
+          var d = Date.now() - ms;
+          if (d < 60000) return "just now";
+          if (d < 3600000) return Math.floor(d / 60000) + "m ago";
+          if (d < 86400000) return Math.floor(d / 3600000) + "h ago";
+          try {
+            return new Date(ms).toLocaleDateString();
+          } catch (e) {
+            return "";
+          }
+        }
+        function iconFor(mime) {
+          mime = mime || "";
+          if (mime.indexOf("image/") === 0) return "🖼️";
+          if (mime.indexOf("video/") === 0) return "🎬";
+          if (mime.indexOf("audio/") === 0) return "🎵";
+          if (mime.indexOf("pdf") >= 0) return "📕";
+          if (mime.indexOf("zip") >= 0 || mime.indexOf("compressed") >= 0 || mime.indexOf("tar") >= 0)
+            return "🗜️";
+          if (mime.indexOf("text/") === 0) return "📄";
+          return "📎";
+        }
+        function el(tag, cls, text) {
+          var e = document.createElement(tag);
+          if (cls) e.className = cls;
+          if (text != null) e.textContent = text;
+          return e;
+        }
+        // Lightweight bottom-center toast for operation feedback (sent, saved,
+        // received, errors). Auto-dismisses; purely cosmetic, never blocks.
+        function showToast(message, type) {
+          if (!toastsEl || !message) return;
+          var t = el("div", "toast " + (type || "info"), message);
+          toastsEl.appendChild(t);
+          requestAnimationFrame(function () {
+            t.classList.add("show");
+          });
+          setTimeout(function () {
+            t.classList.remove("show");
+            setTimeout(function () {
+              t.remove();
+            }, 220);
+          }, 2600);
+        }
+        function fmtSpeed(bps) {
+          if (!isFinite(bps) || bps <= 0) return "";
+          return fmtSize(bps) + "/s";
+        }
+        // Rolling-window transfer rate (bytes/sec) over the last ~1.5s so the
+        // displayed speed reflects current throughput, not the whole-transfer avg.
+        function makeRateMeter() {
+          var samples = [];
+          return {
+            update: function (bytesTotal) {
+              var now =
+                (window.performance && performance.now ? performance.now() : Date.now());
+              samples.push([now, bytesTotal]);
+              while (samples.length > 2 && now - samples[0][0] > 1500) samples.shift();
+            },
+            rate: function () {
+              if (samples.length < 2) return 0;
+              var a = samples[0];
+              var b = samples[samples.length - 1];
+              var dt = (b[0] - a[0]) / 1000;
+              return dt > 0 ? (b[1] - a[1]) / dt : 0;
+            },
+          };
+        }
+        // A progress row (used for both uploads and downloads) showing percent +
+        // live speed and a fill bar.
+        function makeTransferRow(parent, name) {
+          var row = el("div", parent === downloadsEl ? "download" : "upload");
+          var nameRow = el("div", "name");
+          nameRow.appendChild(el("span", null, name));
+          var pct = el("span", "pct", "0%");
+          nameRow.appendChild(pct);
+          row.appendChild(nameRow);
+          var bar = el("div", "bar");
+          var fill = el("span");
+          bar.appendChild(fill);
+          row.appendChild(bar);
+          parent.appendChild(row);
+          return {
+            progress: function (p, bps) {
+              p = Math.max(0, Math.min(100, Math.floor(p)));
+              fill.style.width = p + "%";
+              var s = fmtSpeed(bps);
+              pct.textContent = s ? p + "% · " + s : p + "%";
+            },
+            done: function (label) {
+              fill.style.width = "100%";
+              pct.textContent = label || "Done";
+              var nice = name && name.indexOf("…") < 0 ? name : "";
+              if (parent === downloadsEl) {
+                showToast(nice ? "Saved " + nice : "File saved to this device", "success");
+              } else {
+                showToast(nice ? "Sent " + nice : "File sent", "success");
+              }
+              setTimeout(function () {
+                row.remove();
+              }, 1200);
+            },
+            remove: function () {
+              row.remove();
+            },
+            error: function () {
+              row.className = (parent === downloadsEl ? "download" : "upload") + " error";
+              pct.textContent = "Failed";
+              var nice = name && name.indexOf("…") < 0 ? name : "";
+              if (parent === downloadsEl) {
+                showToast(nice ? "Couldn't download " + nice : "Download failed", "error");
+              } else {
+                showToast(nice ? "Couldn't send " + nice : "Upload failed", "error");
+              }
+            },
+          };
+        }
+
+        // ---- recipients ("send to whom") --------------------------------
+        function nameForDevice(id) {
+          for (var i = 0; i < clients.length; i++) {
+            if (clients[i].deviceId === id) return clients[i].name || "a device";
+          }
+          return "a device";
+        }
+        // "You → Everyone", "iPhone → You", "Mac → Android" — who sent it / who
+        // it's for. Targeted items are only visible to the sender + recipient.
+        function relationLabel(item) {
+          var from = item.senderId === deviceId ? "You" : item.senderLabel || "device";
+          var to;
+          if (!item.target || item.target === "everyone") to = "Everyone";
+          else if (item.target === deviceId) to = "You";
+          else to = nameForDevice(item.target);
+          return from + " → " + to;
+        }
+        // Rebuild the recipient dropdown from the connected peers (deduped by
+        // device, self excluded), preserving the current choice when possible.
+        function renderRecipients() {
+          if (!recipientEl) return;
+          var seen = {};
+          var others = [];
+          for (var i = 0; i < clients.length; i++) {
+            var c = clients[i];
+            if (!c || !c.deviceId || c.deviceId === deviceId || seen[c.deviceId]) continue;
+            seen[c.deviceId] = true;
+            others.push(c);
+          }
+          recipientEl.innerHTML = "";
+          var everyone = el("option", null, "Everyone");
+          everyone.value = "everyone";
+          recipientEl.appendChild(everyone);
+          others.forEach(function (o) {
+            var opt = el("option", null, o.name || "Device");
+            opt.value = o.deviceId;
+            recipientEl.appendChild(opt);
+          });
+          if (selectedTarget !== "everyone" && !seen[selectedTarget]) {
+            selectedTarget = "everyone";
+          }
+          recipientEl.value = selectedTarget;
+        }
+
+        // ---- status -----------------------------------------------------
+        function setStatus(state) {
+          dot.className = "dot" + (state === "live" ? " live" : state === "error" ? " error" : "");
+          if (state === "live") {
+            meta.textContent = clientCount <= 1 ? "Connected" : clientCount + " devices connected";
+          } else if (state === "error") {
+            meta.textContent = "Disconnected — retrying…";
+          } else {
+            meta.textContent = "Connecting…";
+          }
+        }
+
+        // ---- tray render ------------------------------------------------
+        function renderTray(items) {
+          currentItems = items || [];
+          var hasFiles = currentItems.some(function (it) {
+            return it && it.kind === "file";
+          });
+          if (downloadAllBtn) {
+            downloadAllBtn.hidden = !hasFiles;
+          }
+          if (downloadZipBtn) {
+            downloadZipBtn.hidden = !hasFiles;
+          }
+          trayEl.innerHTML = "";
+          if (!items || !items.length) {
+            var empty = el("div", "empty", "Nothing shared yet. Add a file or send some text to get started.");
+            trayEl.appendChild(empty);
+            return;
+          }
+          // Newest first.
+          items
+            .slice()
+            .sort(function (a, b) {
+              return (b.createdAt || 0) - (a.createdAt || 0);
+            })
+            .forEach(function (item) {
+              trayEl.appendChild(item.kind === "text" ? renderText(item) : renderFile(item));
+            });
+        }
+
+        function renderFile(item) {
+          var wrap = el("div", "item");
+          var thumb = el("div", "thumb");
+          if ((item.mime || "").indexOf("image/") === 0) {
+            var img = new Image();
+            img.loading = "lazy";
+            img.src = fileUrl(item.id);
+            thumb.appendChild(img);
+          } else {
+            thumb.textContent = iconFor(item.mime);
+          }
+          wrap.appendChild(thumb);
+
+          var body = el("div", "body");
+          body.appendChild(el("div", "name", item.name));
+          body.appendChild(
+            el("div", "meta", fmtSize(item.size) + " · " + relationLabel(item) + " · " + fmtTime(item.createdAt))
+          );
+          var actions = el("div", "actions");
+          var dl = el("button", "btn icon accent", "⬇ Download");
+          dl.addEventListener("click", function () {
+            startDownload(item);
+          });
+          actions.appendChild(dl);
+          body.appendChild(actions);
+          wrap.appendChild(body);
+          return wrap;
+        }
+
+        function renderText(item) {
+          var wrap = el("div", "item");
+          var thumb = el("div", "thumb", "📝");
+          wrap.appendChild(thumb);
+          var body = el("div", "body");
+          body.appendChild(
+            el("div", "meta", relationLabel(item) + " · " + fmtTime(item.createdAt))
+          );
+          body.appendChild(el("div", "text", item.text || ""));
+          var actions = el("div", "actions");
+          var copy = el("button", "btn icon", "⧉ Copy");
+          copy.addEventListener("click", function () {
+            var t = item.text || "";
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(t).then(
+                function () {
+                  copy.textContent = "✓ Copied";
+                  setTimeout(function () {
+                    copy.textContent = "⧉ Copy";
+                  }, 1400);
+                },
+                function () {}
+              );
+            }
+          });
+          actions.appendChild(copy);
+          body.appendChild(actions);
+          wrap.appendChild(body);
+          return wrap;
+        }
+
+        // ---- websocket --------------------------------------------------
+        function connect() {
+          if (!token) {
+            setStatus("error");
+            meta.textContent = "Missing access token";
+            return;
+          }
+          var proto = location.protocol === "https:" ? "wss" : "ws";
+          ws = new WebSocket(
+            proto +
+              "://" +
+              location.host +
+              "/ws?token=" +
+              encodeURIComponent(token) +
+              "&device=" +
+              encodeURIComponent(deviceId) +
+              "&name=" +
+              encodeURIComponent(deviceName)
+          );
+
+          ws.onopen = function () {
+            reconnectDelay = 800;
+            setStatus("live");
+          };
+          ws.onmessage = function (ev) {
+            var msg;
+            try {
+              msg = JSON.parse(ev.data);
+            } catch (e) {
+              return;
+            }
+            if (msg.type === "welcome") {
+              clients = msg.clients || [];
+              clientCount = clients.length;
+              renderRecipients();
+              setStatus("live");
+              renderTray(msg.items || []);
+              // Seed the items already present (initial load or reconnect) as
+              // "seen" without downloading, then arm auto-push for live arrivals.
+              autoPushArmed = false;
+              maybeAutoPull(msg.items || []);
+              autoPushArmed = true;
+            } else if (msg.type === "tray") {
+              renderTray(msg.items || []);
+              maybeAutoPull(msg.items || []);
+            } else if (msg.type === "clients") {
+              clients = msg.clients || [];
+              clientCount = clients.length;
+              renderRecipients();
+              setStatus("live");
+            } else if (msg.type === "signal") {
+              handleSignal(msg.from, msg.data);
+            }
+          };
+          ws.onclose = function () {
+            ws = null;
+            setStatus("error");
+            setTimeout(connect, reconnectDelay);
+            reconnectDelay = Math.min(reconnectDelay * 1.6, 8000);
+          };
+          ws.onerror = function () {
+            try {
+              ws.close();
+            } catch (e) {}
+          };
+        }
+
+        // ---- direct peer-to-peer (WebRTC) -------------------------------
+        // A file addressed to one online device goes browser→browser over an RTC
+        // data channel, skipping the desktop relay (and its second LAN hop)
+        // entirely. The desktop only relays SDP/ICE. Any failure or timeout falls
+        // back to the hub upload path. Works on a pure LAN via host candidates;
+        // the STUN server just helps when the network allows it.
+        var RTC_CONFIG = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+        var P2P_CONNECT_TIMEOUT = 8000; // ms to establish before falling back
+        var p2pPeers = Object.create(null); // sid -> sender session
+        var p2pRecv = Object.create(null); // sid -> receiver session
+
+        function rtcSupported() {
+          return typeof RTCPeerConnection !== "undefined";
+        }
+        function peerOnline(id) {
+          for (var i = 0; i < clients.length; i++) {
+            if (clients[i] && clients[i].deviceId === id) return true;
+          }
+          return false;
+        }
+        function canP2P(file, target) {
+          return (
+            rtcSupported() &&
+            target &&
+            target !== "everyone" &&
+            (file.size || 0) <= DL_MEM_CAP &&
+            peerOnline(target)
+          );
+        }
+        function sendSignal(to, data) {
+          if (ws && ws.readyState === 1) {
+            ws.send(JSON.stringify({ type: "signal", to: to, data: data }));
+          }
+        }
+
+        // Route an inbound signaling blob to the right session by its sid.
+        function handleSignal(from, data) {
+          if (!data || !data.sid) return;
+          if (data.kind === "offer") {
+            acceptP2P(from, data.sid, data.sdp);
+          } else if (data.kind === "answer") {
+            var s = p2pPeers[data.sid];
+            if (s) s.onAnswer(data.sdp);
+          } else if (data.kind === "ice") {
+            var c = p2pPeers[data.sid] || p2pRecv[data.sid];
+            if (c) c.onIce(data.candidate);
+          }
+        }
+
+        // Buffer ICE candidates that arrive before the remote description is set
+        // (adding one too early throws and loses it, breaking connectivity).
+        function makeIceQueue(pc) {
+          var ready = false;
+          var pending = [];
+          return {
+            flush: function () {
+              ready = true;
+              for (var i = 0; i < pending.length; i++) {
+                pc.addIceCandidate(pending[i]).catch(function () {});
+              }
+              pending = [];
+            },
+            add: function (cand) {
+              if (!cand) return;
+              if (ready) pc.addIceCandidate(cand).catch(function () {});
+              else pending.push(cand);
+            },
+          };
+        }
+
+        // Sender: open a data channel to `target` and stream the file. Resolves
+        // on success; rejects (so the caller falls back to HTTP) on any failure.
+        function sendViaP2P(file, ui, target) {
+          return new Promise(function (resolve, reject) {
+            var sid = randId();
+            var pc = new RTCPeerConnection(RTC_CONFIG);
+            var ice = makeIceQueue(pc);
+            var meter = makeRateMeter();
+            var settled = false;
+            var timer = setTimeout(function () {
+              if (pc.connectionState !== "connected") fail(new Error("p2p timeout"));
+            }, P2P_CONNECT_TIMEOUT);
+
+            function cleanup() {
+              clearTimeout(timer);
+              try { pc.close(); } catch (e) {}
+              delete p2pPeers[sid];
+            }
+            function fail(e) {
+              if (settled) return;
+              settled = true;
+              cleanup();
+              reject(e || new Error("p2p failed"));
+            }
+            function finish() {
+              if (settled) return;
+              settled = true;
+              cleanup();
+              ui.done();
+              resolve();
+            }
+
+            p2pPeers[sid] = {
+              onAnswer: function (sdp) {
+                pc.setRemoteDescription(sdp).then(ice.flush).catch(fail);
+              },
+              onIce: function (cand) {
+                ice.add(cand);
+              },
+            };
+
+            pc.onicecandidate = function (ev) {
+              if (ev.candidate) sendSignal(target, { sid: sid, kind: "ice", candidate: ev.candidate });
+            };
+            pc.onconnectionstatechange = function () {
+              if (pc.connectionState === "failed" || pc.connectionState === "disconnected") {
+                fail(new Error("p2p " + pc.connectionState));
+              }
+            };
+
+            var dc = pc.createDataChannel("file", { ordered: true });
+            dc.binaryType = "arraybuffer";
+            dc.onerror = function () { fail(new Error("dc error")); };
+            dc.onopen = function () {
+              clearTimeout(timer);
+              streamFile();
+            };
+
+            function streamFile() {
+              var chunkSize =
+                pc.sctp && pc.sctp.maxMessageSize
+                  ? Math.min(pc.sctp.maxMessageSize, 262144)
+                  : 16384;
+              var HIGH = 8 * 1024 * 1024; // pause sending above this much buffered
+              dc.bufferedAmountLowThreshold = 1024 * 1024;
+              try {
+                dc.send(
+                  JSON.stringify({ t: "meta", name: file.name || "file", size: file.size, mime: file.type || "" })
+                );
+              } catch (e) { fail(e); return; }
+              var pos = 0;
+              function drain() {
+                if (dc.bufferedAmount < HIGH) return Promise.resolve();
+                return new Promise(function (res) {
+                  dc.onbufferedamountlow = function () { dc.onbufferedamountlow = null; res(); };
+                });
+              }
+              function next() {
+                if (settled) return;
+                if (pos >= file.size) {
+                  try { dc.send(JSON.stringify({ t: "end" })); } catch (e) {}
+                  finish();
+                  return;
+                }
+                drain()
+                  .then(function () {
+                    if (settled) return;
+                    var end = Math.min(pos + chunkSize, file.size);
+                    return file.slice(pos, end).arrayBuffer().then(function (buf) {
+                      if (settled) return;
+                      try { dc.send(buf); } catch (e) { fail(e); return; }
+                      pos = end;
+                      meter.update(pos);
+                      ui.progress(Math.min(99, (pos / file.size) * 100), meter.rate());
+                      next();
+                    });
+                  })
+                  .catch(fail);
+              }
+              next();
+            }
+
+            pc.createOffer()
+              .then(function (offer) { return pc.setLocalDescription(offer); })
+              .then(function () {
+                sendSignal(target, { sid: sid, kind: "offer", sdp: pc.localDescription });
+              })
+              .catch(fail);
+          });
+        }
+
+        // Receiver: auto-accept an incoming offer, pull the file over the data
+        // channel, and save it (consistent with the token-only, auto-push model).
+        function acceptP2P(from, sid, offer) {
+          if (p2pRecv[sid]) return;
+          var pc = new RTCPeerConnection(RTC_CONFIG);
+          var ice = makeIceQueue(pc);
+          var ui = makeTransferRow(downloadsEl, "Incoming file…");
+          var meter = makeRateMeter();
+          var sink = null, received = 0, total = 0, fname = "download", fmime = "";
+
+          p2pRecv[sid] = { onIce: function (cand) { ice.add(cand); } };
+
+          function cleanup() {
+            try { pc.close(); } catch (e) {}
+            delete p2pRecv[sid];
+          }
+          function finishRecv() {
+            if (sink) {
+              try {
+                saveBlob(new Blob([sink], { type: fmime || "application/octet-stream" }), fname);
+                ui.done("Saved");
+              } catch (e) { ui.error(); }
+              sink = null;
+            }
+            cleanup();
+          }
+
+          pc.onicecandidate = function (ev) {
+            if (ev.candidate) sendSignal(from, { sid: sid, kind: "ice", candidate: ev.candidate });
+          };
+          pc.onconnectionstatechange = function () {
+            if (pc.connectionState === "failed") { ui.error(); cleanup(); }
+          };
+          pc.ondatachannel = function (ev) {
+            var dc = ev.channel;
+            dc.binaryType = "arraybuffer";
+            dc.onmessage = function (m) {
+              if (typeof m.data === "string") {
+                var msg;
+                try { msg = JSON.parse(m.data); } catch (e) { return; }
+                if (msg.t === "meta") {
+                  fname = msg.name || "download";
+                  total = msg.size || 0;
+                  fmime = msg.mime || "";
+                  try { sink = new Uint8Array(total); } catch (e) { ui.error(); cleanup(); }
+                } else if (msg.t === "end") {
+                  finishRecv();
+                }
+              } else if (sink) {
+                var buf = new Uint8Array(m.data);
+                sink.set(buf, received);
+                received += buf.byteLength;
+                meter.update(received);
+                if (total) ui.progress((received / total) * 100, meter.rate());
+                if (total && received >= total) finishRecv();
+              }
+            };
+            dc.onerror = function () { ui.error(); cleanup(); };
+          };
+
+          pc.setRemoteDescription(offer)
+            .then(function () { ice.flush(); return pc.createAnswer(); })
+            .then(function (ans) { return pc.setLocalDescription(ans); })
+            .then(function () {
+              sendSignal(from, { sid: sid, kind: "answer", sdp: pc.localDescription });
+            })
+            .catch(function () { ui.error(); cleanup(); });
+        }
+
+        // ---- uploads ----------------------------------------------------
+        // Large files upload far faster split across several parallel
+        // connections; small ones go in a single request. A single TCP stream
+        // rarely saturates a Wi-Fi/Ethernet LAN, so fanning the file out over
+        // several connections is what actually fills the pipe. Browsers allow up
+        // to 6 concurrent connections per origin, so 6 is the practical ceiling.
+        var CHUNK_SIZE = 8 * 1024 * 1024; // 8 MB per chunk
+        var MAX_PARALLEL = 6; // concurrent chunk connections (browser per-origin cap)
+        var CHUNK_THRESHOLD = 6 * 1024 * 1024; // go parallel sooner (was 12 MB)
+        var MAX_CHUNK_RETRIES = 3;
+
+        function uploadFile(file) {
+          // Capture the recipient now so it stays fixed for this transfer.
+          var target = selectedTarget || "everyone";
+          var ui = makeTransferRow(uploadsEl, file.name || "file");
+          // For a file addressed to one online device, try a direct peer-to-peer
+          // (WebRTC) transfer first — it skips the desktop relay entirely. Any
+          // failure or timeout falls back to the hub upload path below.
+          if (canP2P(file, target)) {
+            sendViaP2P(file, ui, target).catch(function () {
+              if (file.size > CHUNK_THRESHOLD) {
+                uploadChunked(file, ui, target);
+              } else {
+                uploadSingle(file, ui, target);
+              }
+            });
+          } else if (file.size > CHUNK_THRESHOLD) {
+            uploadChunked(file, ui, target);
+          } else {
+            uploadSingle(file, ui, target);
+          }
+        }
+
+        function uploadSingle(file, ui, target) {
+          var meter = makeRateMeter();
+          var xhr = new XMLHttpRequest();
+          xhr.open(
+            "POST",
+            "/upload?token=" +
+              encodeURIComponent(token) +
+              "&device=" +
+              encodeURIComponent(deviceId) +
+              "&name=" +
+              encodeURIComponent(deviceName) +
+              "&to=" +
+              encodeURIComponent(target)
+          );
+          xhr.setRequestHeader("x-filename", b64utf8(file.name || "file"));
+          if (file.type) xhr.setRequestHeader("Content-Type", file.type);
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+              meter.update(e.loaded);
+              ui.progress((e.loaded / e.total) * 100, meter.rate());
+            }
+          };
+          xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) ui.done();
+            else ui.error();
+          };
+          xhr.onerror = function () {
+            ui.error();
+          };
+          xhr.send(file);
+        }
+
+        // Slice the file and POST the pieces in parallel, then finalize.
+        function delay(ms) {
+          return new Promise(function (r) {
+            setTimeout(r, ms);
+          });
+        }
+
+        // Announce a targeted chunked transfer before sending its bytes so the
+        // recipient can pull each slice as it lands (cut-through overlap).
+        function beginUpload(file, uploadId, total, chunks, target) {
+          return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "POST",
+              "/upload/begin?token=" +
+                encodeURIComponent(token) +
+                "&uploadId=" +
+                encodeURIComponent(uploadId) +
+                "&total=" +
+                total +
+                "&chunks=" +
+                chunks +
+                "&chunkSize=" +
+                CHUNK_SIZE +
+                "&device=" +
+                encodeURIComponent(deviceId) +
+                "&name=" +
+                encodeURIComponent(deviceName) +
+                "&to=" +
+                encodeURIComponent(target)
+            );
+            xhr.setRequestHeader("x-filename", b64utf8(file.name || "file"));
+            if (file.type) xhr.setRequestHeader("Content-Type", file.type);
+            xhr.onload = function () {
+              if (xhr.status >= 200 && xhr.status < 300) resolve();
+              else reject(new Error("begin failed"));
+            };
+            xhr.onerror = function () {
+              reject(new Error("begin error"));
+            };
+            xhr.send();
+          });
+        }
+
+        function uploadChunked(file, ui, target) {
+          var total = file.size;
+          var chunks = Math.ceil(total / CHUNK_SIZE);
+          var uploadId = randId();
+          var loaded = new Array(chunks).fill(0);
+          var aborted = false;
+          var next = 0;
+          var meter = makeRateMeter();
+
+          function refresh() {
+            var sum = 0;
+            for (var i = 0; i < loaded.length; i++) sum += loaded[i];
+            meter.update(sum);
+            // Hold at 99% until the finalize step confirms.
+            ui.progress(Math.min(99, (sum / total) * 100), meter.rate());
+          }
+
+          function sendChunk(index) {
+            return new Promise(function (resolve, reject) {
+              function attempt(tries) {
+                if (aborted) {
+                  reject(new Error("aborted"));
+                  return;
+                }
+                var start = index * CHUNK_SIZE;
+                var end = Math.min(start + CHUNK_SIZE, total);
+                var blob = file.slice(start, end);
+                var xhr = new XMLHttpRequest();
+                xhr.open(
+                  "POST",
+                  "/upload/chunk?token=" +
+                    encodeURIComponent(token) +
+                    "&uploadId=" +
+                    encodeURIComponent(uploadId) +
+                    "&index=" +
+                    index +
+                    "&offset=" +
+                    start +
+                    "&total=" +
+                    total +
+                    "&chunks=" +
+                    chunks
+                );
+                xhr.upload.onprogress = function (e) {
+                  if (e.lengthComputable) {
+                    loaded[index] = e.loaded;
+                    refresh();
+                  }
+                };
+                xhr.onload = function () {
+                  if (xhr.status >= 200 && xhr.status < 300) {
+                    loaded[index] = blob.size;
+                    refresh();
+                    resolve();
+                  } else if (tries < MAX_CHUNK_RETRIES) {
+                    attempt(tries + 1);
+                  } else {
+                    reject(new Error("chunk " + index + " failed"));
+                  }
+                };
+                xhr.onerror = function () {
+                  if (tries < MAX_CHUNK_RETRIES) attempt(tries + 1);
+                  else reject(new Error("chunk " + index + " error"));
+                };
+                xhr.send(blob);
+              }
+              attempt(0);
+            });
+          }
+
+          function worker() {
+            if (aborted || next >= chunks) return Promise.resolve();
+            var i = next++;
+            return sendChunk(i).then(worker);
+          }
+
+          function runChunks() {
+            var pool = [];
+            for (var w = 0; w < Math.min(MAX_PARALLEL, chunks); w++) pool.push(worker());
+            return Promise.all(pool)
+              .then(function () {
+                return finishUpload(file, uploadId, target);
+              })
+              .then(function () {
+                ui.done();
+              })
+              .catch(function () {
+                aborted = true;
+                abortUpload(uploadId);
+                ui.error();
+              });
+          }
+
+          // For a transfer addressed to one device, announce it up front so that
+          // device pulls each slice as it lands (cut-through overlap) instead of
+          // waiting for the whole upload first. If the announce fails, fall back
+          // to the normal "publish once complete" flow.
+          if (target && target !== "everyone") {
+            beginUpload(file, uploadId, total, chunks, target).then(runChunks, runChunks);
+          } else {
+            runChunks();
+          }
+        }
+
+        function finishUpload(file, uploadId, target) {
+          return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "POST",
+              "/upload/finish?token=" +
+                encodeURIComponent(token) +
+                "&uploadId=" +
+                encodeURIComponent(uploadId) +
+                "&device=" +
+                encodeURIComponent(deviceId) +
+                "&name=" +
+                encodeURIComponent(deviceName) +
+                "&to=" +
+                encodeURIComponent(target)
+            );
+            xhr.setRequestHeader("x-filename", b64utf8(file.name || "file"));
+            if (file.type) xhr.setRequestHeader("Content-Type", file.type);
+            xhr.onload = function () {
+              if (xhr.status >= 200 && xhr.status < 300) resolve();
+              else reject(new Error("finish failed"));
+            };
+            xhr.onerror = function () {
+              reject(new Error("finish error"));
+            };
+            xhr.send();
+          });
+        }
+
+        function abortUpload(uploadId) {
+          try {
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "POST",
+              "/upload/abort?token=" +
+                encodeURIComponent(token) +
+                "&uploadId=" +
+                encodeURIComponent(uploadId)
+            );
+            xhr.send();
+          } catch (e) {}
+        }
+
+        function uploadFiles(list) {
+          if (!list) return;
+          for (var i = 0; i < list.length; i++) uploadFile(list[i]);
+        }
+
+        // ---- downloads --------------------------------------------------
+        // Pull a file over several parallel range requests (much faster than one
+        // stream) while showing live speed. Stream straight to disk when the
+        // browser supports it (Chrome/Android), else assemble in memory up to a
+        // cap, else fall back to a plain browser download.
+        var DL_PART_SIZE = 8 * 1024 * 1024; // 8 MB per range request
+        var DL_WAIT_STEP = 250; // ms to wait before retrying a slice still uploading
+        var DL_STALL_CAP = 120000; // give up if no slice arrives for this long (ms)
+        // Max bytes to assemble in memory when the disk-streaming API is absent
+        // (phones): scaled to device RAM, clamped to a safe 256 MB–1 GB. Bigger
+        // files fall back to a normal browser download.
+        var DL_MEM_CAP =
+          Math.min(Math.max((navigator.deviceMemory || 2) * 0.2, 0.25), 1) * 1024 * 1024 * 1024;
+
+        function startDownload(item, auto) {
+          var total = item.size || 0;
+          // Auto-pulled transfers run without a user gesture, so they must avoid
+          // `showSaveFilePicker` (which throws without one). They assemble in
+          // memory under the cap, else fall back to a plain browser download.
+          if (!auto && total > 0 && window.showSaveFilePicker) {
+            downloadParallel(item, total, diskSink);
+          } else if (total > 0 && total <= DL_MEM_CAP) {
+            downloadParallel(item, total, blobSink);
+          } else {
+            nativeDownload(item); // huge file w/o disk API: let the browser handle it
+          }
+        }
+
+        function downloadParallel(item, total, makeSink) {
+          var ui = makeTransferRow(downloadsEl, item.name || "file");
+          var meter = makeRateMeter();
+          var sink = null;
+          var aborted = false;
+          var next = 0;
+          var done = 0;
+          var whole = false;
+          var lastProgressAt = Date.now();
+          var parts = Math.max(1, Math.ceil(total / DL_PART_SIZE));
+
+          function fail() {
+            aborted = true;
+            if (sink && sink.abort) {
+              try {
+                sink.abort();
+              } catch (e) {}
+            }
+            ui.error();
+          }
+
+          // Fetch one slice via a Range request. Resolves with the bytes, their
+          // offset, and whether the server actually honored the range (206). A
+          // 425 means the sender hasn't uploaded this slice yet (live relay).
+          function fetchPart(i) {
+            var start = i * DL_PART_SIZE;
+            var end = Math.min(start + DL_PART_SIZE, total) - 1;
+            return fetch(fileUrl(item.id), {
+              headers: { Range: "bytes=" + start + "-" + end },
+              cache: "no-store",
+            }).then(function (res) {
+              if (res.status === 425) return { tooEarly: true };
+              if (res.status !== 206 && res.status !== 200) {
+                throw new Error("http " + res.status);
+              }
+              return res.arrayBuffer().then(function (buf) {
+                return { start: start, buf: buf, ranged: res.status === 206 };
+              });
+            });
+          }
+
+          function writeChunk(start, buf) {
+            return Promise.resolve(sink.write(start, buf)).then(function () {
+              done += buf.byteLength;
+              lastProgressAt = Date.now();
+              meter.update(done);
+              ui.progress((done / total) * 100, meter.rate());
+            });
+          }
+
+          // Pull one slice, waiting for it if the sender is still uploading it
+          // (live relay returns 425 until the slice lands). The wait is bounded
+          // by how long the whole transfer has gone without *any* slice arriving,
+          // so a slow-but-progressing sender is fine and a dead one fails.
+          function pullPart(i) {
+            return fetchPart(i).then(function (r) {
+              if (aborted || whole) return;
+              if (r.tooEarly) {
+                if (Date.now() - lastProgressAt > DL_STALL_CAP) {
+                  throw new Error("slice " + i + " stalled");
+                }
+                return delay(DL_WAIT_STEP).then(function () {
+                  return aborted || whole ? undefined : pullPart(i);
+                });
+              }
+              if (!r.ranged) {
+                // Server ignored Range and returned the whole file in one shot —
+                // take it as the complete file and let the other workers stand
+                // down (avoids several redundant full-file fetches).
+                whole = true;
+                return writeChunk(0, r.buf);
+              }
+              return writeChunk(r.start, r.buf);
+            });
+          }
+
+          function worker() {
+            if (aborted || whole || next >= parts) return Promise.resolve();
+            var i = next++;
+            return pullPart(i).then(function () {
+              if (aborted || whole) return;
+              return worker();
+            });
+          }
+
+          Promise.resolve(makeSink(item, total))
+            .then(function (s) {
+              sink = s;
+              // The total size is known up front and the server honors Range, so
+              // fan every slice out across connections immediately — no serial
+              // probe of the first chunk holding the rest back. The `whole` guard
+              // in worker() handles a non-conforming server that ignores Range.
+              var pool = [];
+              var n = Math.min(MAX_PARALLEL, parts);
+              for (var w = 0; w < n; w++) pool.push(worker());
+              return Promise.all(pool);
+            })
+            .then(function () {
+              if (aborted) return;
+              return sink.close();
+            })
+            .then(function () {
+              if (!aborted) ui.done("Saved");
+            })
+            .catch(function (err) {
+              // User dismissing the save dialog isn't a failure.
+              if (err && err.name === "AbortError") {
+                aborted = true;
+                ui.remove();
+              } else {
+                fail();
+              }
+            });
+        }
+
+        // Stream parts straight to a user-picked file (no memory ceiling).
+        function diskSink(item) {
+          return window
+            .showSaveFilePicker({ suggestedName: item.name || "download" })
+            .then(function (handle) {
+              return handle.createWritable();
+            })
+            .then(function (writable) {
+              return {
+                write: function (pos, buf) {
+                  return writable.write({ type: "write", position: pos, data: buf });
+                },
+                close: function () {
+                  return writable.close();
+                },
+                abort: function () {
+                  try {
+                    return writable.abort ? writable.abort() : writable.close();
+                  } catch (e) {}
+                },
+              };
+            });
+        }
+
+        // Assemble parts in memory, then trigger a normal save.
+        function blobSink(item, total) {
+          var bytes = new Uint8Array(total);
+          return {
+            write: function (pos, buf) {
+              bytes.set(new Uint8Array(buf), pos);
+            },
+            close: function () {
+              saveBlob(new Blob([bytes], { type: item.mime || "application/octet-stream" }), item.name);
+            },
+            abort: function () {},
+          };
+        }
+
+        function saveBlob(blob, name) {
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = name || "download";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () {
+            URL.revokeObjectURL(url);
+          }, 8000);
+        }
+
+        function nativeDownload(item) {
+          var a = document.createElement("a");
+          a.href = fileUrl(item.id);
+          a.download = item.name || "";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+
+        // ---- send text --------------------------------------------------
+        function sendText() {
+          var t = (textEl.value || "").trim();
+          if (!t || !ws || ws.readyState !== 1) return;
+          ws.send(JSON.stringify({ type: "send_text", text: t, target: selectedTarget || "everyone" }));
+          textEl.value = "";
+          syncTextBtn();
+          showToast("Text sent", "success");
+        }
+        function syncTextBtn() {
+          sendTextBtn.disabled = !(textEl.value || "").trim();
+        }
+
+        // Download every shared file to this device, one after another. Auto mode
+        // assembles each in memory (or falls back to a plain browser download), so
+        // no per-file save dialog — and its required user gesture — is needed.
+        function downloadAllFiles() {
+          var files = (currentItems || []).filter(function (it) {
+            return it && it.kind === "file";
+          });
+          if (!files.length) return;
+          showToast(
+            "Downloading " + files.length + " file" + (files.length === 1 ? "" : "s") + "…",
+            "info"
+          );
+          var i = 0;
+          (function next() {
+            if (i >= files.length) return;
+            startDownload(files[i++], true);
+            // Stagger so the browser doesn't block the burst of downloads.
+            setTimeout(next, 400);
+          })();
+        }
+
+        // Bundle every shared file into one server-built zip and save it to this
+        // device as a single download (no per-file fan-out).
+        function downloadAllAsZip() {
+          var files = (currentItems || []).filter(function (it) {
+            return it && it.kind === "file";
+          });
+          if (!files.length) return;
+          showToast("Preparing zip…", "info");
+          var url =
+            "/download-all.zip?token=" +
+            encodeURIComponent(token) +
+            "&device=" +
+            encodeURIComponent(deviceId);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "QuickShare.zip";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+
+        // ---- wire up ----------------------------------------------------
+        recipientEl.addEventListener("change", function () {
+          selectedTarget = recipientEl.value || "everyone";
+        });
+        pickBtn.addEventListener("click", function () {
+          fileInput.click();
+        });
+        fileInput.addEventListener("change", function () {
+          uploadFiles(fileInput.files);
+          fileInput.value = "";
+        });
+        sendTextBtn.addEventListener("click", sendText);
+        if (downloadAllBtn) {
+          downloadAllBtn.addEventListener("click", downloadAllFiles);
+        }
+        if (downloadZipBtn) {
+          downloadZipBtn.addEventListener("click", downloadAllAsZip);
+        }
+        textEl.addEventListener("input", syncTextBtn);
+        textEl.addEventListener("keydown", function (e) {
+          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+            e.preventDefault();
+            sendText();
+          }
+        });
+
+        ["dragenter", "dragover"].forEach(function (t) {
+          composer.addEventListener(t, function (e) {
+            e.preventDefault();
+            composer.classList.add("drag");
+          });
+        });
+        ["dragleave", "drop"].forEach(function (t) {
+          composer.addEventListener(t, function (e) {
+            e.preventDefault();
+            composer.classList.remove("drag");
+          });
+        });
+        composer.addEventListener("drop", function (e) {
+          if (e.dataTransfer && e.dataTransfer.files) uploadFiles(e.dataTransfer.files);
+        });
+        document.addEventListener("paste", function (e) {
+          if (!e.clipboardData) return;
+          if (e.clipboardData.files && e.clipboardData.files.length) {
+            uploadFiles(e.clipboardData.files);
+          }
+        });
+
+        setStatus("connecting");
+        renderRecipients();
+        connect();
+      })();
+    </script>
+  </body>
+</html>

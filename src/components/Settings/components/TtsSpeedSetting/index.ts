@@ -1,0 +1,1 @@
+export { TtsSpeedSetting } from './TtsSpeedSetting'

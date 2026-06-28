@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Genisys — Icon Redesign Options</title>
+    <style>
+      :root {
+        --bg: #0b0b12;
+        --panel: #14141d;
+        --panel-2: #191925;
+        --border: #262636;
+        --fg: #e7e7ef;
+        --muted: #9494a6;
+        --primary: #6366f1;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: radial-gradient(120% 80% at 50% -10%, #16161f 0%, var(--bg) 60%);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 48px 32px 96px;
+      }
+      header { max-width: 1180px; margin: 0 auto 40px; }
+      h1 { font-size: 26px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px; }
+      header p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 760px; }
+      code { background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 6px; font-size: 0.9em; }
+      .grid {
+        max-width: 1180px; margin: 0 auto;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+        border: 1px solid var(--border); border-radius: 18px; padding: 22px;
+        display: flex; flex-direction: column; gap: 18px;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+      .card:hover { border-color: color-mix(in srgb, var(--primary) 55%, var(--border)); transform: translateY(-2px); }
+      .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+      .opt-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+      .opt-num {
+        font-variant-numeric: tabular-nums; font-size: 12px; font-weight: 600; color: var(--primary);
+        background: color-mix(in srgb, var(--primary) 14%, transparent);
+        border: 1px solid color-mix(in srgb, var(--primary) 26%, transparent);
+        padding: 2px 9px; border-radius: 999px;
+      }
+      .opt-desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin: -6px 0 0; min-height: 38px; }
+      .previews { display: flex; align-items: center; gap: 20px; }
+      .tile {
+        width: 112px; height: 112px; flex: none; border-radius: 25px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.04);
+      }
+      .scales { display: flex; align-items: center; gap: 18px; padding-left: 2px; }
+      .scale { display: flex; flex-direction: column; align-items: center; gap: 7px; color: var(--muted); }
+      .scale span { font-size: 10px; }
+      .chip {
+        width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+        background: #101019; border: 1px solid var(--border);
+      }
+      .mono { color: var(--fg); }
+      .accent { color: var(--primary); }
+      footer { max-width: 1180px; margin: 48px auto 0; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Genisys — Icon Redesign Options</h1>
+      <p>
+        Nine modern / minimal directions. Each shows a rounded app-icon tile plus small
+        monochrome renders (28&nbsp;px &amp; 16&nbsp;px) to check how it reads in the activity
+        bar. Tell me the option number and I'll wire it through the app — app icon,
+        <code>GenisysIcon</code>, the animated reveal, splash, activity bar and About.
+      </p>
+    </header>
+
+    <main class="grid">
+      <!-- 01 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Terminal Prompt</span><span class="opt-num">01</span></div>
+        <p class="opt-desc">The classic <code>&gt;_</code> developer glyph. Instantly “dev”, ultra-minimal, scales perfectly.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g1)"/>
+            <g fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><polyline points="176,178 256,256 176,334"/><line x1="292" y1="334" x2="372" y2="334"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"><polyline points="176,178 256,256 176,334"/><line x1="292" y1="334" x2="372" y2="334"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><polyline points="176,178 256,256 176,334"/><line x1="292" y1="334" x2="372" y2="334"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Code Tag</span><span class="opt-num">02</span></div>
+        <p class="opt-desc">A <code>&lt;/&gt;</code> mark — universally “code”. Balanced, symmetric, friendly.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g2)"/>
+            <g fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><polyline points="196,170 132,256 196,342"/><polyline points="316,170 380,256 316,342"/><line x1="288" y1="158" x2="224" y2="354"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"><polyline points="196,170 132,256 196,342"/><polyline points="316,170 380,256 316,342"/><line x1="288" y1="158" x2="224" y2="354"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"><polyline points="196,170 132,256 196,342"/><polyline points="316,170 380,256 316,342"/><line x1="288" y1="158" x2="224" y2="354"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Monogram D</span><span class="opt-num">03</span></div>
+        <p class="opt-desc">A confident solid “D”. Brandable, bold, reads as Genisys at any size.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g3" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g3)"/>
+            <path d="M170 148 L170 364 L262 364 C338 364 372 312 372 256 C372 200 338 148 262 148 Z" fill="none" stroke="#6366f1" stroke-width="34" stroke-linejoin="round"/>
+            <circle cx="262" cy="256" r="20" fill="#6366f1"/>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><path d="M170 148 L170 364 L262 364 C338 364 372 312 372 256 C372 200 338 148 262 148 Z" fill="none" stroke="currentColor" stroke-width="38" stroke-linejoin="round"/><circle cx="262" cy="256" r="22" fill="currentColor"/></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><path d="M170 148 L170 364 L262 364 C338 364 372 312 372 256 C372 200 338 148 262 148 Z" fill="currentColor"/><circle cx="262" cy="256" r="40" fill="#101019"/></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Panel (refined)</span><span class="opt-num">04</span></div>
+        <p class="opt-desc">Your current “workspace window”, simplified to one clean sidebar split.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g4" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g4)"/>
+            <g fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"><rect x="140" y="160" width="232" height="192" rx="30"/><line x1="212" y1="160" x2="212" y2="352"/></g>
+            <circle cx="176" cy="200" r="11" fill="#6366f1"/><circle cx="176" cy="238" r="11" fill="#6366f1"/>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><rect x="140" y="160" width="232" height="192" rx="30"/><line x1="212" y1="160" x2="212" y2="352"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"><rect x="140" y="160" width="232" height="192" rx="30"/><line x1="212" y1="160" x2="212" y2="352"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">D · O Ligature</span><span class="opt-num">05</span></div>
+        <p class="opt-desc">“D” + “O” fused into one ring-and-stem mark. Geometric, memorable, abstract.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g5" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7c83ff"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g5)"/>
+            <g fill="none" stroke="#fff" stroke-width="32" stroke-linecap="round"><circle cx="256" cy="256" r="108"/><line x1="256" y1="148" x2="256" y2="364"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="36" stroke-linecap="round"><circle cx="256" cy="256" r="108"/><line x1="256" y1="148" x2="256" y2="364"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="44" stroke-linecap="round"><circle cx="256" cy="256" r="104"/><line x1="256" y1="152" x2="256" y2="360"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Hex Core</span><span class="opt-num">06</span></div>
+        <p class="opt-desc">A hexagon “core / module” with a centred cursor. Reads as a platform / OS kernel.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g6" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g6)"/>
+            <polygon points="256,140 366,202 366,310 256,372 146,310 146,202" fill="none" stroke="#6366f1" stroke-width="30" stroke-linejoin="round"/>
+            <g fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><polyline points="232,232 268,256 232,280"/><line x1="286" y1="280" x2="300" y2="280"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><polygon points="256,140 366,202 366,310 256,372 146,310 146,202" fill="none" stroke="currentColor" stroke-width="34" stroke-linejoin="round"/></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><polygon points="256,136 370,200 370,312 256,376 142,312 142,200" fill="none" stroke="currentColor" stroke-width="42" stroke-linejoin="round"/></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Curly Braces</span><span class="opt-num">07</span></div>
+        <p class="opt-desc">A clean <code>{ }</code> wrapping a dot — “code that runs”. Calm and elegant.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g7" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g7)"/>
+            <g fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"><path d="M214 158 C176 158 184 222 156 248 C150 253 150 259 156 264 C184 290 176 354 214 354"/><path d="M298 158 C336 158 328 222 356 248 C362 253 362 259 356 264 C328 290 336 354 298 354"/></g>
+            <circle cx="256" cy="256" r="22" fill="#6366f1"/>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"><path d="M214 158 C176 158 184 222 156 248 C150 253 150 259 156 264 C184 290 176 354 214 354"/><path d="M298 158 C336 158 328 222 356 248 C362 253 362 259 356 264 C328 290 336 354 298 354"/></g><circle cx="256" cy="256" r="24" fill="currentColor"/></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><path d="M210 150 C168 150 178 220 150 248 C144 253 144 259 150 264 C178 292 168 362 210 362"/><path d="M302 150 C344 150 334 220 362 248 C368 253 368 259 362 264 C334 292 344 362 302 362"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Stacked Layers</span><span class="opt-num">08</span></div>
+        <p class="opt-desc">Three offset layers — “operating system / stack”. Depth without clutter.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g8" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g8)"/>
+            <g fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"><polygon points="256,150 360,206 256,262 152,206"/><polyline points="152,256 256,312 360,256"/><polyline points="152,306 256,362 360,306"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"><polygon points="256,150 360,206 256,262 152,206"/><polyline points="152,256 256,312 360,256"/><polyline points="152,306 256,362 360,306"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><g fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><polygon points="256,150 362,206 256,262 150,206"/><polyline points="150,260 256,316 362,260"/></g></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 -->
+      <section class="card">
+        <div class="card-head"><span class="opt-name">Prompt Window</span><span class="opt-num">09</span></div>
+        <p class="opt-desc">Hybrid: a soft window holding a <code>&gt;_</code> prompt. Bridges your panel idea with “terminal”.</p>
+        <div class="previews">
+          <svg class="tile" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g9" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23232f"/><stop offset="1" stop-color="#0e0e16"/></linearGradient></defs>
+            <rect width="512" height="512" rx="116" fill="url(#g9)"/>
+            <rect x="132" y="148" width="248" height="216" rx="40" fill="none" stroke="#fff" stroke-width="24"/>
+            <g fill="none" stroke="#6366f1" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"><polyline points="190,232 236,266 190,300"/><line x1="262" y1="300" x2="322" y2="300"/></g>
+          </svg>
+          <div class="scales">
+            <div class="scale"><span class="chip"><svg class="mono" width="28" height="28" viewBox="0 0 512 512"><rect x="132" y="148" width="248" height="216" rx="40" fill="none" stroke="currentColor" stroke-width="28"/><g fill="none" stroke="currentColor" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"><polyline points="190,232 236,266 190,300"/><line x1="262" y1="300" x2="322" y2="300"/></g></svg></span><span>28</span></div>
+            <div class="scale"><span class="chip"><svg class="accent" width="16" height="16" viewBox="0 0 512 512"><rect x="120" y="140" width="272" height="232" rx="44" fill="none" stroke="currentColor" stroke-width="38"/></svg></span><span>16</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Open this file in a browser (or VS Code’s built-in HTML preview). Backgrounds and stroke
+      weights are tuned per concept — final in-app colors follow your theme’s <code>--primary</code>.
+      Pick a number and I’ll implement it across the app.
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+  <rect x="50" y="50" width="412" height="412" rx="93" fill="url(#bg)"/>
+  <g transform="translate(256 256) scale(0.8047) translate(-256 -256)" fill="none" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="256,150 360,206 256,262 152,206"/>
+    <polyline points="152,256 256,312 360,256"/>
+    <polyline points="152,306 256,362 360,306"/>
+  </g>
+</svg>

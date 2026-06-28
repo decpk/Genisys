@@ -1,0 +1,53 @@
+import { memo } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { useSettingsStore } from '@/store/settings-store'
+import { LANGUAGE_OPTIONS } from '@/lib/languages'
+import { SettingRow } from '../SettingRow'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+
+export const ExplainLanguageSetting = memo(function ExplainLanguageSetting(): React.JSX.Element {
+  const explainLanguage = useSettingsStore((s) => s.explainLanguage)
+  const setExplainLanguage = useSettingsStore((s) => s.setExplainLanguage)
+
+  const currentLabel = LANGUAGE_OPTIONS.find((o) => o.value === explainLanguage)?.label ?? 'English'
+
+  return (
+    <SettingRow
+      label="Explain language"
+      description="Language used when explaining selected text via the 'Explain This' feature."
+    >
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-secondary/60 text-foreground hover:bg-secondary transition-colors cursor-pointer border border-border/40">
+            <span>{currentLabel}</span>
+            <ChevronDown size={12} />
+          </button>
+        </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={6}
+            className="z-50 min-w-[180px] max-h-[min(400px,var(--radix-dropdown-menu-content-available-height))] overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-md animate-in fade-in-0 zoom-in-95"
+          >
+            {LANGUAGE_OPTIONS.map((opt) => (
+              <DropdownMenuItem
+                key={opt.value}
+                onSelect={() => setExplainLanguage(opt.value)}
+                className={`flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[13px] cursor-pointer outline-none transition-colors ${
+                  explainLanguage === opt.value
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-foreground/80 hover:bg-secondary'
+                }`}
+              >
+                {opt.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+      </DropdownMenu>
+    </SettingRow>
+  )
+})

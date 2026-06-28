@@ -1,0 +1,1 @@
+export { TerminalTabBar } from './TerminalTabBar'

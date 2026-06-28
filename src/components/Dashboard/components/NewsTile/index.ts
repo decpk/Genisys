@@ -1,0 +1,1 @@
+export { NewsTile } from './NewsTile'

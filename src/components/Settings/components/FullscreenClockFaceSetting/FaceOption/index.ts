@@ -1,0 +1,1 @@
+export { FaceOption } from './FaceOption'

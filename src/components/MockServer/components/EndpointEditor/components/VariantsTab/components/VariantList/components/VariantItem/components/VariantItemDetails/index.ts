@@ -1,0 +1,1 @@
+export { VariantItemDetails } from './VariantItemDetails'

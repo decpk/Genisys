@@ -1,0 +1,1 @@
+export { RingsPreview } from './RingsPreview'

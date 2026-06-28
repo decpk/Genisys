@@ -1,0 +1,1 @@
+export { WebpointEditorCanvas } from './WebpointEditorCanvas'

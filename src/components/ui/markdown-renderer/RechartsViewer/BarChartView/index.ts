@@ -1,0 +1,1 @@
+export { BarChartView } from './BarChartView'

@@ -1,0 +1,1 @@
+export { WebpointInspector } from './WebpointInspector'

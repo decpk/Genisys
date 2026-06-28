@@ -1,0 +1,21 @@
+/**
+ * Ghost text styles for AI inline autocomplete.
+ * The ghost text is rendered as a ProseMirror decoration widget —
+ * it must look like it belongs to the surrounding text but clearly
+ * indicate it's a suggestion, not real content.
+ */
+
+.ai-ghost-text {
+  color: var(--color-muted-foreground, #71717a);
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+  font-style: normal;
+  font-weight: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

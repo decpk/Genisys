@@ -1,0 +1,1 @@
+export { DailyGoalBadge } from './DailyGoalBadge'

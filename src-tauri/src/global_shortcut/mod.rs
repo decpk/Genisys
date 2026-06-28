@@ -1,0 +1,3 @@
+mod register_clipboard_shortcut;
+
+pub use register_clipboard_shortcut::register_clipboard_shortcut;

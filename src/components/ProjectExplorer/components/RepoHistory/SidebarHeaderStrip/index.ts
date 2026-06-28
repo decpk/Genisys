@@ -1,0 +1,1 @@
+export { SidebarHeaderStrip } from './SidebarHeaderStrip'

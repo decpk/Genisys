@@ -1,0 +1,1 @@
+export { GlobalFontSetting } from './GlobalFontSetting'

@@ -1,0 +1,1 @@
+export { AppStoreInstalledView } from './AppStoreInstalledView'

@@ -1,0 +1,1 @@
+export { TerminalThemeSetting } from './TerminalThemeSetting'

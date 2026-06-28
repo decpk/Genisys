@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <title>Monitor — Live View</title>
+    <style>
+      :root {
+        --bg: #0b0e14;
+        --panel: #11151f;
+        --fg: #e6e6e6;
+        --muted: #8b93a7;
+        --accent: #4f9cf9;
+        --accent-press: #3b82d6;
+        --danger: #f97066;
+        --live: #22c55e;
+        --border: #1e2536;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+        overscroll-behavior: none;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        padding-top: calc(10px + env(safe-area-inset-top));
+        background: var(--panel);
+        border-bottom: 1px solid var(--border);
+        z-index: 5;
+      }
+      header .title {
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: 0.2px;
+      }
+      header .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--muted);
+        flex: none;
+        transition: background 0.2s;
+      }
+      header .dot.live {
+        background: var(--live);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+      }
+      header .dot.error {
+        background: var(--danger);
+      }
+      header .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      header .spacer {
+        flex: 1;
+      }
+      .hdr-btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        border-radius: 9px;
+        min-width: 40px;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hdr-btn:active {
+        background: #0a0d13;
+      }
+      .hdr-btn.active {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      #stage {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        background: #000;
+        overflow: hidden;
+        touch-action: none;
+      }
+      #video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #000;
+      }
+      #video.flip-h {
+        transform: scaleX(-1);
+      }
+      #overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+        background: radial-gradient(120% 120% at 50% 40%, rgba(17, 21, 31, 0.7), rgba(11, 14, 20, 0.95));
+        z-index: 4;
+        transition: opacity 0.25s;
+      }
+      #overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #overlay .spinner {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        border-top-color: var(--accent);
+        animation: spin 0.9s linear infinite;
+      }
+      #overlay.is-error .spinner,
+      #overlay.is-idle .spinner {
+        display: none;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #overlay .msg {
+        font-size: 15px;
+        max-width: 320px;
+        line-height: 1.45;
+        color: var(--fg);
+      }
+      #overlay .sub {
+        font-size: 13px;
+        color: var(--muted);
+        max-width: 300px;
+        line-height: 1.4;
+      }
+      .btn {
+        appearance: none;
+        border: none;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 12px 22px;
+        cursor: pointer;
+      }
+      .btn:active {
+        background: var(--accent-press);
+      }
+      #listen {
+        position: absolute;
+        left: 50%;
+        bottom: calc(22px + env(safe-area-inset-bottom));
+        transform: translateX(-50%);
+        z-index: 4;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      }
+      #listen.show {
+        display: inline-flex;
+      }
+      .ptz-pill {
+        position: absolute;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(17, 21, 31, 0.72);
+        color: var(--fg);
+        font-size: 12px;
+        font-weight: 500;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        pointer-events: none;
+      }
+      #ptz-zoom {
+        top: calc(10px + env(safe-area-inset-top));
+        left: 12px;
+        opacity: 0;
+        transition: opacity 0.2s;
+        font-variant-numeric: tabular-nums;
+      }
+      #ptz-zoom.show {
+        opacity: 1;
+      }
+      #ptz-hint {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(74px + env(safe-area-inset-bottom));
+        max-width: 88%;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.35s;
+      }
+      #ptz-hint.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <span class="dot" id="dot"></span>
+        <span class="title">Monitor</span>
+        <span class="meta" id="meta">Connecting…</span>
+        <span class="spacer"></span>
+        <button class="hdr-btn" id="flip" title="Flip horizontally" aria-label="Toggle horizontal flip">⇄</button>
+        <button class="hdr-btn" id="mute" title="Audio" aria-label="Toggle audio">🔇</button>
+        <button class="hdr-btn" id="fs" title="Fullscreen" aria-label="Toggle fullscreen">⛶</button>
+      </header>
+      <div id="stage">
+        <video id="video" autoplay playsinline muted></video>
+        <div id="overlay" class="is-idle">
+          <div class="spinner"></div>
+          <div class="msg" id="ov-msg">Connecting…</div>
+          <div class="sub" id="ov-sub"></div>
+          <button class="btn" id="ov-btn" style="display: none"></button>
+        </div>
+        <button class="btn" id="listen">🔊 Tap to listen</button>
+        <div class="ptz-pill" id="ptz-zoom">1.0×</div>
+        <div class="ptz-pill" id="ptz-hint">
+          Drag to pan · pinch or scroll to zoom · double-tap to reset
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var GRANT_KEY = "genisys.monitor.grant";
+        var FLIP_KEY = "genisys.monitor.flip";
+
+        var video = document.getElementById("video");
+        var dot = document.getElementById("dot");
+        var meta = document.getElementById("meta");
+        var overlay = document.getElementById("overlay");
+        var ovMsg = document.getElementById("ov-msg");
+        var ovSub = document.getElementById("ov-sub");
+        var ovBtn = document.getElementById("ov-btn");
+        var listenBtn = document.getElementById("listen");
+        var muteBtn = document.getElementById("mute");
+        var fsBtn = document.getElementById("fs");
+        var flipBtn = document.getElementById("flip");
+        var stage = document.getElementById("stage");
+        var ptzZoom = document.getElementById("ptz-zoom");
+        var ptzHint = document.getElementById("ptz-hint");
+
+        var params = new URLSearchParams(location.search);
+        var TOKEN = params.get("token") || "";
+
+        var ws = null;
+        var pc = null;
+        var isLive = false;
+        var flipH = false;
+
+        // ---- trust grant (skip re-approval on reload) ----
+        function loadGrant() {
+          try {
+            var raw = localStorage.getItem(GRANT_KEY);
+            if (!raw) return "";
+            var g = JSON.parse(raw);
+            if (g && g.token === TOKEN && g.grant && g.expiresAt > Date.now()) {
+              return g.grant;
+            }
+          } catch (e) {}
+          return "";
+        }
+        function saveGrant(grant, expiresAt) {
+          try {
+            localStorage.setItem(
+              GRANT_KEY,
+              JSON.stringify({ token: TOKEN, grant: grant, expiresAt: expiresAt })
+            );
+          } catch (e) {}
+        }
+        function clearGrant() {
+          try {
+            localStorage.removeItem(GRANT_KEY);
+          } catch (e) {}
+        }
+
+        // ---- UI helpers ----
+        function setStatus(kind, metaText, msg, sub, btnLabel, btnFn) {
+          dot.className = "dot" + (kind === "live" ? " live" : kind === "error" ? " error" : "");
+          meta.textContent = metaText || "";
+          if (kind === "live") {
+            overlay.classList.add("hidden");
+            return;
+          }
+          overlay.classList.remove("hidden");
+          overlay.classList.toggle("is-error", kind === "error");
+          overlay.classList.toggle("is-idle", kind === "idle");
+          ovMsg.textContent = msg || "";
+          ovSub.textContent = sub || "";
+          if (btnLabel) {
+            ovBtn.style.display = "";
+            ovBtn.textContent = btnLabel;
+            ovBtn.onclick = btnFn || null;
+          } else {
+            ovBtn.style.display = "none";
+            ovBtn.onclick = null;
+          }
+        }
+
+        function setLive() {
+          if (isLive) return;
+          isLive = true;
+          setStatus("live", "Live");
+          // Muted autoplay is always allowed; offer a one-tap unmute to hear audio.
+          if (video.muted) listenBtn.classList.add("show");
+          updateZoomBadge();
+          showPtzHint();
+          // Sync the desktop's shared framing to this viewer's current state.
+          sendControl();
+        }
+
+        function unmute() {
+          video.muted = false;
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+          listenBtn.classList.remove("show");
+          muteBtn.textContent = "🔊";
+          muteBtn.classList.add("active");
+        }
+        listenBtn.addEventListener("click", unmute);
+        muteBtn.addEventListener("click", function () {
+          if (video.muted) {
+            unmute();
+          } else {
+            video.muted = true;
+            muteBtn.textContent = "🔇";
+            muteBtn.classList.remove("active");
+            if (isLive) listenBtn.classList.add("show");
+          }
+        });
+
+        fsBtn.addEventListener("click", function () {
+          var stage = document.getElementById("stage");
+          if (!document.fullscreenElement) {
+            (stage.requestFullscreen || stage.webkitRequestFullscreen || function () {}).call(stage);
+            fsBtn.classList.add("active");
+          } else {
+            (document.exitFullscreen || document.webkitExitFullscreen || function () {}).call(document);
+            fsBtn.classList.remove("active");
+          }
+        });
+
+        // ---- horizontal flip (mirror) — per-viewer display preference ----
+        // Display-only: mirrors this viewer's <video> via CSS. The desktop
+        // capture/stream is untouched, so other viewers are unaffected. Default
+        // off (raw "real" view); the choice is remembered per device.
+        function loadFlip() {
+          try {
+            return localStorage.getItem(FLIP_KEY) === "1";
+          } catch (e) {
+            return false;
+          }
+        }
+        function saveFlip() {
+          try {
+            localStorage.setItem(FLIP_KEY, flipH ? "1" : "0");
+          } catch (e) {}
+        }
+        function applyFlip() {
+          video.classList.toggle("flip-h", flipH);
+          flipBtn.classList.toggle("active", flipH);
+        }
+        flipBtn.addEventListener("click", function () {
+          flipH = !flipH;
+          saveFlip();
+          applyFlip();
+        });
+        flipH = loadFlip();
+        applyFlip();
+
+        // ---- digital PTZ (pan / tilt / zoom) gestures ----
+        // The viewer re-frames the desktop's single shared capture by sending
+        // { kind:"control", zoom, cx, cy } over the signaling channel. zoom >= 1;
+        // cx/cy in [0,1] are the normalized center of the cropped region.
+        var MIN_ZOOM = 1, MAX_ZOOM = 5;
+        var viewState = { zoom: 1, cx: 0.5, cy: 0.5 };
+        var controlQueued = false;
+        var hintTimer = null;
+
+        function clampNum(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
+        // Throttle control sends to at most one per animation frame.
+        function sendControl() {
+          if (controlQueued) return;
+          controlQueued = true;
+          requestAnimationFrame(function () {
+            controlQueued = false;
+            sendSignal({
+              kind: "control",
+              zoom: viewState.zoom,
+              cx: viewState.cx,
+              cy: viewState.cy,
+            });
+          });
+        }
+
+        function updateZoomBadge() {
+          if (!ptzZoom) return;
+          ptzZoom.textContent = viewState.zoom.toFixed(1) + "\u00d7";
+          ptzZoom.classList.toggle("show", isLive && viewState.zoom > 1.01);
+        }
+
+        function applyZoom(factor) {
+          var z = clampNum(viewState.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+          if (z === viewState.zoom) return;
+          viewState.zoom = z;
+          if (z === 1) { viewState.cx = 0.5; viewState.cy = 0.5; }
+          updateZoomBadge();
+          sendControl();
+        }
+
+        function applyPan(dxFrac, dyFrac) {
+          // Move the framing opposite the drag (grab feel), scaled by zoom so a
+          // drag across the view pans roughly across the visible region. When the
+          // view is mirrored, invert the horizontal delta so panning still tracks
+          // the finger against the flipped image.
+          var dx = flipH ? -dxFrac : dxFrac;
+          viewState.cx = clampNum(viewState.cx - dx / viewState.zoom, 0, 1);
+          viewState.cy = clampNum(viewState.cy - dyFrac / viewState.zoom, 0, 1);
+          sendControl();
+        }
+
+        function resetView() {
+          viewState.zoom = 1;
+          viewState.cx = 0.5;
+          viewState.cy = 0.5;
+          updateZoomBadge();
+          sendControl();
+        }
+
+        function showPtzHint() {
+          if (!ptzHint) return;
+          ptzHint.classList.add("show");
+          if (hintTimer) clearTimeout(hintTimer);
+          hintTimer = setTimeout(function () {
+            ptzHint.classList.remove("show");
+          }, 3500);
+        }
+
+        // Pointer tracking for one-finger drag-pan + two-finger pinch-zoom.
+        var activePointers = {};
+        var pointerCount = 0;
+        var lastPanX = 0, lastPanY = 0;
+        var lastPinchDist = 0;
+        var lastTapTime = 0;
+
+        function stageSize() {
+          var r = stage.getBoundingClientRect();
+          return { w: r.width || 1, h: r.height || 1 };
+        }
+
+        function pinchDistance() {
+          var pts = [];
+          for (var id in activePointers) pts.push(activePointers[id]);
+          if (pts.length < 2) return 0;
+          var dx = pts[0].x - pts[1].x, dy = pts[0].y - pts[1].y;
+          return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        stage.addEventListener("pointerdown", function (e) {
+          if (!isLive) return;
+          if (e.target && e.target.closest && e.target.closest("button")) return;
+          activePointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+          pointerCount++;
+          try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+          if (pointerCount === 1) {
+            lastPanX = e.clientX;
+            lastPanY = e.clientY;
+            var now = Date.now();
+            if (now - lastTapTime < 300) { resetView(); lastTapTime = 0; }
+            else lastTapTime = now;
+          } else if (pointerCount === 2) {
+            lastPinchDist = pinchDistance();
+          }
+        });
+
+        stage.addEventListener("pointermove", function (e) {
+          if (!isLive || !activePointers[e.pointerId]) return;
+          activePointers[e.pointerId].x = e.clientX;
+          activePointers[e.pointerId].y = e.clientY;
+          if (pointerCount >= 2) {
+            var d = pinchDistance();
+            if (lastPinchDist > 0 && d > 0) applyZoom(d / lastPinchDist);
+            lastPinchDist = d;
+          } else if (pointerCount === 1 && viewState.zoom > 1.01) {
+            var sz = stageSize();
+            var dx = (e.clientX - lastPanX) / sz.w;
+            var dy = (e.clientY - lastPanY) / sz.h;
+            lastPanX = e.clientX;
+            lastPanY = e.clientY;
+            applyPan(dx, dy);
+          }
+        });
+
+        function endPointer(e) {
+          if (activePointers[e.pointerId]) {
+            delete activePointers[e.pointerId];
+            pointerCount = Math.max(0, pointerCount - 1);
+          }
+          if (pointerCount < 2) lastPinchDist = 0;
+        }
+        stage.addEventListener("pointerup", endPointer);
+        stage.addEventListener("pointercancel", endPointer);
+
+        stage.addEventListener(
+          "wheel",
+          function (e) {
+            if (!isLive) return;
+            e.preventDefault();
+            applyZoom(Math.exp(-e.deltaY * 0.0015));
+          },
+          { passive: false }
+        );
+
+        stage.addEventListener("dblclick", function (e) {
+          if (!isLive) return;
+          e.preventDefault();
+          resetView();
+        });
+
+        // ---- WebRTC ----
+        function sendSignal(data) {
+          if (ws && ws.readyState === 1) {
+            ws.send(JSON.stringify({ type: "signal", data: data }));
+          }
+        }
+
+        function ensurePc() {
+          if (pc) return;
+          pc = new RTCPeerConnection({ iceServers: [] });
+          pc.onicecandidate = function (e) {
+            if (e.candidate) {
+              sendSignal({
+                kind: "ice",
+                candidate: e.candidate.candidate,
+                sdpMid: e.candidate.sdpMid,
+                sdpMLineIndex: e.candidate.sdpMLineIndex,
+              });
+            }
+          };
+          pc.ontrack = function (e) {
+            var stream = (e.streams && e.streams[0]) || new MediaStream([e.track]);
+            if (video.srcObject !== stream) {
+              video.srcObject = stream;
+              var p = video.play();
+              if (p && p.catch) p.catch(function () {});
+            }
+          };
+          pc.onconnectionstatechange = function () {
+            if (!pc) return;
+            var st = pc.connectionState;
+            if (st === "connected") {
+              setLive();
+            } else if (st === "failed") {
+              setStatus("error", "Connection failed", "Could not establish the video connection.", "Make sure both devices are on the same Wi-Fi.", "Retry", reconnect);
+            }
+          };
+        }
+
+        async function handleSignal(data) {
+          if (!data || !data.kind) return;
+          ensurePc();
+          try {
+            if (data.kind === "offer") {
+              await pc.setRemoteDescription({ type: "offer", sdp: data.sdp });
+              var answer = await pc.createAnswer();
+              await pc.setLocalDescription(answer);
+              sendSignal({ kind: "answer", sdp: answer.sdp });
+            } else if (data.kind === "ice" && data.candidate) {
+              await pc.addIceCandidate({
+                candidate: data.candidate,
+                sdpMid: data.sdpMid,
+                sdpMLineIndex: data.sdpMLineIndex,
+              });
+            }
+          } catch (e) {
+            /* ignore malformed/late signaling */
+          }
+        }
+
+        function teardownPc() {
+          if (pc) {
+            try {
+              pc.close();
+            } catch (e) {}
+            pc = null;
+          }
+          isLive = false;
+          video.srcObject = null;
+          listenBtn.classList.remove("show");
+        }
+
+        // ---- websocket ----
+        function connect() {
+          if (!TOKEN) {
+            setStatus("error", "No token", "This link is missing its access token.", "Re-scan the QR code from the desktop.");
+            return;
+          }
+          teardownPc();
+          setStatus("idle", "Connecting…", "Connecting…");
+          var proto = location.protocol === "https:" ? "wss" : "ws";
+          var url = proto + "://" + location.host + "/ws?token=" + encodeURIComponent(TOKEN);
+          var grant = loadGrant();
+          if (grant) url += "&grant=" + encodeURIComponent(grant);
+
+          ws = new WebSocket(url);
+          ws.onopen = function () {
+            setStatus("idle", "Waiting…", "Waiting for access…");
+          };
+          ws.onmessage = function (ev) {
+            var msg;
+            try {
+              msg = JSON.parse(ev.data);
+            } catch (e) {
+              return;
+            }
+            switch (msg.type) {
+              case "pending":
+                setStatus("idle", "Pending", "Waiting for the desktop to allow this device…", "Approve the request on the desktop to start the live view.");
+                break;
+              case "granted":
+                if (msg.grant) saveGrant(msg.grant, msg.expiresAt);
+                break;
+              case "signal":
+                handleSignal(msg.data);
+                break;
+              case "denied":
+                clearGrant();
+                setStatus("error", "Denied", "The desktop denied access.", msg.reason || "", "Try again", reconnect);
+                break;
+              case "error":
+                setStatus("error", "Error", msg.message || "Something went wrong.", "", "Retry", reconnect);
+                break;
+            }
+          };
+          ws.onclose = function () {
+            if (!isLive) {
+              setStatus("idle", "Disconnected", "Disconnected from the desktop.", "", "Reconnect", reconnect);
+            } else {
+              setStatus("error", "Disconnected", "The live feed ended.", "", "Reconnect", reconnect);
+            }
+          };
+          ws.onerror = function () {
+            /* onclose will follow */
+          };
+        }
+
+        function reconnect() {
+          if (ws) {
+            try {
+              ws.close();
+            } catch (e) {}
+            ws = null;
+          }
+          connect();
+        }
+
+        connect();
+      })();
+    </script>
+  </body>
+</html>

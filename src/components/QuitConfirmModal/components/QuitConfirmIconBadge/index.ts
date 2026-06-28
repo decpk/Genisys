@@ -1,0 +1,1 @@
+export { QuitConfirmIconBadge } from './QuitConfirmIconBadge'

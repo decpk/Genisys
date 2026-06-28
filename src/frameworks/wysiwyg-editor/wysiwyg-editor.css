@@ -1,0 +1,742 @@
+/**
+ * Styles for the Tiptap-based WYSIWYG Editor framework.
+ */
+
+.wysiwyg-editor-root {
+  font-family: var(--font-sans);
+  color: var(--color-foreground);
+  line-height: 1.7;
+}
+
+/* ── Editor content area ───────────────────────────────────── */
+.wysiwyg-editor-root .tiptap {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  caret-color: var(--color-foreground);
+  outline: none;
+  padding: 1rem;
+  flex: 1;
+}
+
+.wysiwyg-editor-root.wysiwyg-editor-readonly .tiptap,
+.wysiwyg-editor-root.wysiwyg-editor-readonly .tiptap * {
+  cursor: default;
+}
+
+/* ── Compact variant ───────────────────────────────────────── */
+.wysiwyg-editor-compact.wysiwyg-editor-root .tiptap {
+  font-size: 13px;
+  line-height: 1.65;
+  padding: 0.75rem 1rem;
+}
+
+.wysiwyg-editor-compact.wysiwyg-editor-root h1 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.wysiwyg-editor-compact.wysiwyg-editor-root h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0.4rem 0 0.15rem;
+}
+
+.wysiwyg-editor-compact.wysiwyg-editor-root h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.35rem 0 0.1rem;
+}
+
+/* ── Placeholder ───────────────────────────────────────────── */
+.wysiwyg-editor-root .tiptap p.is-editor-empty:first-child::before {
+  color: var(--color-muted-foreground);
+  opacity: 0.6;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Headings ──────────────────────────────────────────────── */
+.wysiwyg-editor-root h1 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.875rem;
+  letter-spacing: -0.025em;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.wysiwyg-editor-root h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin: 1.25rem 0 0.4rem;
+}
+
+.wysiwyg-editor-root h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 1rem 0 0.3rem;
+}
+
+.wysiwyg-editor-root .tiptap > *:first-child {
+  margin-top: 0;
+}
+
+/* ── Code blocks ───────────────────────────────────────────── */
+.wysiwyg-editor-root pre,
+.wysiwyg-editor-root code {
+  font-family: var(--font-mono);
+}
+
+.wysiwyg-editor-root pre {
+  font-size: 13px;
+  line-height: 1.6;
+  border-radius: var(--radius-lg, 0.5rem);
+  background: var(--color-muted);
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.wysiwyg-editor-root :not(pre) > code {
+  font-size: 13px;
+  padding: 2px 5px;
+  border-radius: var(--radius-sm, 0.25rem);
+  background: var(--color-muted);
+}
+
+/* ── Task list ─────────────────────────────────────────────── */
+.wysiwyg-editor-root ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 2px 0;
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: calc(1em * 1.75);
+  cursor: pointer;
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm, 0.25rem);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > label input[type="checkbox"]:hover {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > label input[type="checkbox"]:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > label input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--color-primary-foreground);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.wysiwyg-editor-root ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  opacity: 0.5;
+  color: var(--color-muted-foreground);
+}
+
+/* ── Table ─────────────────────────────────────────────────── */
+.wysiwyg-editor-root table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.75rem 0;
+  border: 1px solid var(--color-border);
+}
+
+.wysiwyg-editor-root th,
+.wysiwyg-editor-root td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  min-width: 80px;
+}
+
+.wysiwyg-editor-root th {
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+  font-weight: 600;
+}
+
+/* ── Focus rings ───────────────────────────────────────────── */
+.wysiwyg-editor-root *:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.wysiwyg-editor-root .tiptap:focus-visible {
+  outline: none;
+}
+
+/* ── Scrollbar styling ─────────────────────────────────────── */
+.wysiwyg-editor-root ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.wysiwyg-editor-root ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wysiwyg-editor-root ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-muted-foreground) 30%, transparent);
+  border-radius: 3px;
+}
+
+.wysiwyg-editor-root ::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-muted-foreground) 50%, transparent);
+}
+
+/* ── Selection ─────────────────────────────────────────────── */
+.wysiwyg-editor-root ::selection {
+  background: color-mix(in srgb, var(--color-ring) 35%, transparent);
+  color: inherit;
+}
+
+/* ProseMirror uses its own selection layer for full-document / node
+   selections (Cmd+A) instead of the browser ::selection pseudo.        */
+.wysiwyg-editor-root .ProseMirror-selectednode {
+  outline: 2px solid color-mix(in srgb, var(--color-ring) 50%, transparent);
+  border-radius: var(--radius-sm, 0.25rem);
+}
+
+.wysiwyg-editor-root .tiptap .selection,
+.wysiwyg-editor-root .tiptap *::selection {
+  background: color-mix(in srgb, var(--color-ring) 35%, transparent);
+}
+
+.wysiwyg-editor-root .prosemirror-selection-highlight {
+  background: color-mix(in srgb, var(--color-ring) 30%, transparent);
+  border-radius: 2px;
+}
+
+/* ── Divider ───────────────────────────────────────────────── */
+.wysiwyg-editor-root hr {
+  border-color: var(--color-border);
+  margin: 1rem 0;
+}
+
+/* ── Fancy Divider (stylized node) ─────────────────────────── */
+/* Reset paragraph-like margins; the inner wrapper owns its spacing
+   (matches AbuDhabiSeparator in the AI Assistant panel). */
+.wysiwyg-editor-root [data-stylized-divider] {
+  margin: 0;
+  padding: 0;
+}
+
+.wysiwyg-editor-root [data-stylized-divider].ProseMirror-selectednode {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ── Links ─────────────────────────────────────────────────── */
+.wysiwyg-editor-root a {
+  color: var(--color-primary);
+  text-decoration-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.wysiwyg-editor-root a:hover {
+  text-decoration-color: var(--color-primary);
+}
+
+/* ── Blockquote ────────────────────────────────────────────── */
+.wysiwyg-editor-root blockquote {
+  border-left: 3px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: var(--color-muted-foreground);
+}
+
+/* ── Image ─────────────────────────────────────────────────── */
+.wysiwyg-editor-root img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md, 0.375rem);
+  margin: 0.75rem 0;
+}
+
+/* ── Highlight mark ────────────────────────────────────────── */
+.wysiwyg-editor-root mark {
+  background-color: hsl(50 100% 70% / 0.5);
+  border-radius: 2px;
+  padding: 1px 2px;
+}
+
+/* ── Lists ─────────────────────────────────────────────────── */
+.wysiwyg-editor-root ul:not([data-type="taskList"]) {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.wysiwyg-editor-root ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Bubble Menu
+   ══════════════════════════════════════════════════════════════ */
+.bubble-menu {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--color-popover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg, 0.5rem);
+  box-shadow:
+    0 4px 16px hsl(0 0% 0% / 0.2),
+    0 1px 4px hsl(0 0% 0% / 0.1);
+  z-index: 50;
+}
+
+.bubble-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--color-foreground);
+  border-radius: var(--radius-sm, 0.25rem);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bubble-menu button:hover {
+  background: var(--color-muted);
+}
+
+.bubble-menu button.is-active {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Slash Command Menu
+   ══════════════════════════════════════════════════════════════ */
+.slash-command-popup {
+  pointer-events: auto;
+}
+
+.slash-command-menu {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--color-popover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 0.375rem);
+  box-shadow: 0 4px 16px hsl(0 0% 0% / 0.15);
+}
+
+.slash-command-empty {
+  padding: 8px 12px;
+  color: var(--color-muted-foreground);
+  font-size: 13px;
+  text-align: center;
+}
+
+.slash-command-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-foreground);
+  border-radius: var(--radius-sm, 0.25rem);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.slash-command-item:hover,
+.slash-command-item.is-selected {
+  background: var(--color-muted);
+}
+
+.slash-command-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm, 0.25rem);
+  background: var(--color-muted);
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.slash-command-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.slash-command-label {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.slash-command-description {
+  font-size: 12px;
+  color: var(--color-muted-foreground);
+  line-height: 1.3;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Syntax Highlighting (lowlight / hljs tokens)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Light theme (default) ─────────────────────────────────── */
+.wysiwyg-editor-root .hljs-comment,
+.wysiwyg-editor-root .hljs-quote {
+  color: hsl(0 0% 50%);
+  font-style: italic;
+}
+
+.wysiwyg-editor-root .hljs-keyword,
+.wysiwyg-editor-root .hljs-selector-tag,
+.wysiwyg-editor-root .hljs-addition {
+  color: hsl(300 63% 40%);
+}
+
+.wysiwyg-editor-root .hljs-string,
+.wysiwyg-editor-root .hljs-meta .hljs-string,
+.wysiwyg-editor-root .hljs-regexp,
+.wysiwyg-editor-root .hljs-selector-attr,
+.wysiwyg-editor-root .hljs-selector-pseudo {
+  color: hsl(5 74% 46%);
+}
+
+.wysiwyg-editor-root .hljs-number,
+.wysiwyg-editor-root .hljs-literal {
+  color: hsl(150 60% 32%);
+}
+
+.wysiwyg-editor-root .hljs-built_in,
+.wysiwyg-editor-root .hljs-type,
+.wysiwyg-editor-root .hljs-params {
+  color: hsl(30 70% 42%);
+}
+
+.wysiwyg-editor-root .hljs-title,
+.wysiwyg-editor-root .hljs-title\.class_,
+.wysiwyg-editor-root .hljs-section {
+  color: hsl(210 70% 45%);
+  font-weight: 600;
+}
+
+.wysiwyg-editor-root .hljs-title\.function_ {
+  color: hsl(210 70% 45%);
+  font-weight: 500;
+}
+
+.wysiwyg-editor-root .hljs-name,
+.wysiwyg-editor-root .hljs-tag {
+  color: hsl(0 65% 45%);
+}
+
+.wysiwyg-editor-root .hljs-attr,
+.wysiwyg-editor-root .hljs-attribute {
+  color: hsl(30 65% 42%);
+}
+
+.wysiwyg-editor-root .hljs-variable,
+.wysiwyg-editor-root .hljs-template-variable,
+.wysiwyg-editor-root .hljs-symbol {
+  color: hsl(350 60% 45%);
+}
+
+.wysiwyg-editor-root .hljs-deletion {
+  color: hsl(0 70% 45%);
+  background: hsl(0 60% 95%);
+}
+
+.wysiwyg-editor-root .hljs-addition {
+  background: hsl(120 50% 94%);
+}
+
+.wysiwyg-editor-root .hljs-meta {
+  color: hsl(200 60% 45%);
+}
+
+.wysiwyg-editor-root .hljs-emphasis {
+  font-style: italic;
+}
+
+.wysiwyg-editor-root .hljs-strong {
+  font-weight: 700;
+}
+
+/* ── Dark theme ────────────────────────────────────────────── */
+.dark .wysiwyg-editor-root .hljs-comment,
+.dark .wysiwyg-editor-root .hljs-quote {
+  color: hsl(220 10% 50%);
+}
+
+.dark .wysiwyg-editor-root .hljs-keyword,
+.dark .wysiwyg-editor-root .hljs-selector-tag,
+.dark .wysiwyg-editor-root .hljs-addition {
+  color: hsl(286 60% 72%);
+}
+
+.dark .wysiwyg-editor-root .hljs-string,
+.dark .wysiwyg-editor-root .hljs-meta .hljs-string,
+.dark .wysiwyg-editor-root .hljs-regexp,
+.dark .wysiwyg-editor-root .hljs-selector-attr,
+.dark .wysiwyg-editor-root .hljs-selector-pseudo {
+  color: hsl(29 70% 66%);
+}
+
+.dark .wysiwyg-editor-root .hljs-number,
+.dark .wysiwyg-editor-root .hljs-literal {
+  color: hsl(150 55% 60%);
+}
+
+.dark .wysiwyg-editor-root .hljs-built_in,
+.dark .wysiwyg-editor-root .hljs-type,
+.dark .wysiwyg-editor-root .hljs-params {
+  color: hsl(39 67% 69%);
+}
+
+.dark .wysiwyg-editor-root .hljs-title,
+.dark .wysiwyg-editor-root .hljs-title\.class_,
+.dark .wysiwyg-editor-root .hljs-section {
+  color: hsl(210 80% 70%);
+}
+
+.dark .wysiwyg-editor-root .hljs-title\.function_ {
+  color: hsl(210 80% 70%);
+}
+
+.dark .wysiwyg-editor-root .hljs-name,
+.dark .wysiwyg-editor-root .hljs-tag {
+  color: hsl(355 65% 65%);
+}
+
+.dark .wysiwyg-editor-root .hljs-attr,
+.dark .wysiwyg-editor-root .hljs-attribute {
+  color: hsl(29 60% 65%);
+}
+
+.dark .wysiwyg-editor-root .hljs-variable,
+.dark .wysiwyg-editor-root .hljs-template-variable,
+.dark .wysiwyg-editor-root .hljs-symbol {
+  color: hsl(355 55% 65%);
+}
+
+.dark .wysiwyg-editor-root .hljs-deletion {
+  color: hsl(0 60% 60%);
+  background: hsl(0 40% 18%);
+}
+
+.dark .wysiwyg-editor-root .hljs-addition {
+  background: hsl(120 30% 18%);
+}
+
+.dark .wysiwyg-editor-root .hljs-meta {
+  color: hsl(200 60% 65%);
+}
+
+/* ── Daily Status compact overrides ────────────────────────── */
+.daily-status-editor .tiptap {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 0.5rem;
+}
+
+.daily-status-editor h1 {
+  font-size: 1.05rem;
+  margin: 0.5rem 0 0.15rem;
+}
+
+.daily-status-editor h2 {
+  font-size: 0.95rem;
+  margin: 0.4rem 0 0.1rem;
+}
+
+.daily-status-editor h3 {
+  font-size: 0.875rem;
+  margin: 0.35rem 0 0.1rem;
+}
+
+.daily-status-editor .tiptap > * + * {
+  margin-top: 0.3em;
+}
+
+.daily-status-editor h1:first-child,
+.daily-status-editor h2:first-child,
+.daily-status-editor h3:first-child {
+  margin-top: 0;
+}
+
+/* ─── Wiki links ([[Title]]) ──────────────────────────────────────────────── */
+
+.wiki-link-chip {
+  display: inline;
+  white-space: nowrap;
+}
+
+.wiki-link-chip > button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2em;
+  padding: 0 0.25em;
+  margin: 0 0.02em;
+  border: none;
+  background: transparent;
+  font: inherit;
+  line-height: inherit;
+  border-radius: var(--radius-sm, 0.25rem);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.wiki-link-chip .wiki-link-chip-icon {
+  position: relative;
+  top: 0.12em;
+  flex-shrink: 0;
+}
+
+.wiki-link-chip.is-resolved > button {
+  color: var(--color-primary);
+}
+
+.wiki-link-chip.is-resolved > button:hover {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.wiki-link-chip.is-unresolved > button {
+  color: var(--color-muted-foreground);
+  text-decoration: underline dashed currentColor 1px;
+  text-underline-offset: 2px;
+}
+
+.wiki-link-chip.is-unresolved > button:hover {
+  color: var(--color-foreground);
+  background: var(--color-muted);
+}
+
+/* ─── Wiki link autocomplete popup ────────────────────────────────────────── */
+
+.wiki-link-popup {
+  z-index: 9999;
+}
+
+.wiki-link-menu {
+  min-width: 220px;
+  max-width: 320px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--color-popover);
+  color: var(--color-popover-foreground);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 0.375rem);
+  box-shadow: 0 8px 24px hsl(0 0% 0% / 0.18);
+}
+
+.wiki-link-menu-empty {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--color-muted-foreground);
+}
+
+.wiki-link-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm, 0.25rem);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.wiki-link-menu-item.is-selected {
+  background: var(--color-accent, var(--color-muted));
+}
+
+.wiki-link-menu-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-muted-foreground);
+}
+
+.wiki-link-menu-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.wiki-link-menu-label {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wiki-link-menu-hint {
+  font-size: 11px;
+  color: var(--color-muted-foreground);
+}
